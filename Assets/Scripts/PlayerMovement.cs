@@ -2,19 +2,23 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f;  // Speed at which the player moves forward
+    public static float moveSpeed = 10f;  // Speed at which the player moves forward
     public float sideSpeed = 3f;  // Speed for sideways movement
-    public float boostSpeed = 10f; // Speed during boost
+    
+    [SerializeField]
+    private float boostAdd = 10f; // Speed during boost
     public float boostDuration = 2f; // Duration of the speed boost
-    public float slowDownFactor = 0.5f; // Factor to slow down the player
     private bool isSliding = false; // Flag to check if the player is sliding
     private bool isStopped = false; // Flag to check if the player is stopped
     private float originalMoveSpeed; // Store the original move speed
     private float boostEndTime; // Time when the boost ends
 
+    private float boostSpeed;
+
     void Start()
     {
         originalMoveSpeed = moveSpeed; // Store the original move speed
+        boostSpeed = moveSpeed + boostAdd;
     }
 
     void Update()
@@ -39,23 +43,17 @@ public class PlayerMovement : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         transform.Translate(-1 * Vector3.right * horizontalInput * sideSpeed * Time.deltaTime);
 
-        // Speed boost with W key
-        if (Input.GetKeyDown(KeyCode.W))
+        // Speed boost with S key
+        if (Input.GetKey(KeyCode.S))
         {
             moveSpeed = boostSpeed;
             boostEndTime = Time.time + boostDuration;
         }
 
-        // Check if boost duration has ended
-        if (Time.time > boostEndTime)
+        // Slow down with W key
+        if (Input.GetKey(KeyCode.W))
         {
-            moveSpeed = originalMoveSpeed; // Reset to original speed
-        }
-
-        // Slow down with S key
-        if (Input.GetKey(KeyCode.S))
-        {
-            moveSpeed = originalMoveSpeed * slowDownFactor;
+            moveSpeed = originalMoveSpeed - boostAdd;
         }
         else if (Time.time > boostEndTime) // Only reset if not boosting
         {
