@@ -179,6 +179,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266fa710517c14f4ab00ed2d2c006b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameplayActions:
+    m_Name: Gameplay Actions
+    m_Id: 0dce8a69-4096-4f6a-821d-a583c8bee629
+    m_Asset: {fileID: 0}
+    m_Actions:
+    - m_Name: Crouch
+      m_Type: 1
+      m_ExpectedControlType: Button
+      m_Id: 8c546201-4388-4fe2-8589-fff3bb85bede
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    - m_Name: Tell Erik To Die
+      m_Type: 1
+      m_ExpectedControlType: Button
+      m_Id: 7ea33999-81c7-4ee8-9bd4-5a26ed24a1c1
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Bindings:
+    - m_Name: 
+      m_Id: 8e6373c1-6429-4c26-b18e-3f367ed86126
+      m_Path: <Keyboard>/c
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Crouch
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 3fee744e-839a-4453-99ad-47876aca101e
+      m_Path: <Gamepad>/buttonSouth
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Crouch
+      m_Flags: 0
+    - m_Name: 
+      m_Id: b24ef93c-a179-436c-b694-9a7c13ed6aad
+      m_Path: <Keyboard>/space
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Tell Erik To Die
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 4cc0028e-220a-4087-a57e-6377059f2484
+      m_Path: <Gamepad>/buttonWest
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Tell Erik To Die
+      m_Flags: 0
   sideSpeed: 8
   boostAdd: 7
   boostDuration: 0.01

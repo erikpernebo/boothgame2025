@@ -1,7 +1,11 @@
 using UnityEngine;
+using System.Collections;
+
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public InputActionMap gameplayActions;
     public static float moveSpeed = 10f;  // Speed at which the player moves forward
     public float sideSpeed = 3f;  // Speed for sideways movement
     
@@ -15,6 +19,22 @@ public class PlayerMovement : MonoBehaviour
 
     private float boostSpeed;
 
+    void Awake()
+    {
+        gameplayActions.Enable();
+
+        gameplayActions["Crouch"].performed += ctx => 
+            {
+                isSliding = !isSliding;
+                UpdatePlayerRotation();
+            };
+
+        gameplayActions["Tell Erik To Die"].performed += ctx =>
+            {
+                Debug.Log("Go fuck yourself pernebo");
+            };
+    }
+
     void Start()
     {
         originalMoveSpeed = moveSpeed; // Store the original move speed
@@ -23,12 +43,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Handle toggling slide with the C key
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            isSliding = !isSliding;
-            UpdatePlayerRotation();
-        }
 
         // If the player is stopped, don't move
         if (isStopped)
