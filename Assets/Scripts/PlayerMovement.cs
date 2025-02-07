@@ -10,14 +10,21 @@ public class PlayerMovement : MonoBehaviour
     public float sideSpeed = 3f;  // Speed for sideways movement
     
     [SerializeField]
-    private float boostAdd = 10f; // Speed during boost
-    public float boostDuration = 2f; // Duration of the speed boost
+    private float forwardAdd = 10f; // Speed during forward
+    [SerializeField]
+    private float slowAdd = 15f; // Speed during slow
+    [SerializeField]
+    private float boostDuration = 1f;
+    [SerializeField]
+    private float boostCooldown = 1f;
+    [SerializeField]
+    private float boostMultiplier = 2f;
+    private float forwardSpeed;
+    private float slowSpeed;
     private bool isSliding = false; // Flag to check if the player is sliding
     private bool isStopped = false; // Flag to check if the player is stopped
     private float originalMoveSpeed; // Store the original move speed
-    private float boostEndTime; // Time when the boost ends
-
-    private float boostSpeed;
+    private float timeSinceBoost;
 
     void Awake()
     {
@@ -28,50 +35,57 @@ public class PlayerMovement : MonoBehaviour
                 isSliding = !isSliding;
                 UpdatePlayerRotation();
             };
-
-        gameplayActions["Tell Erik To Die"].performed += ctx =>
-            {
-                Debug.Log("Go fuck yourself pernebo");
-            };
     }
 
     void Start()
     {
         originalMoveSpeed = moveSpeed; // Store the original move speed
-        boostSpeed = moveSpeed + boostAdd;
+        forwardSpeed = moveSpeed + forwardAdd;
+        slowSpeed = originalMoveSpeed - slowAdd;
+        timeSinceBoost = boostDuration + boostCooldown;
     }
 
     void Update()
     {
+        timeSinceBoost += Time.deltaTime;
 
         // If the player is stopped, don't move
-        if (isStopped)
-        {
+        if (isStopped) {
             return;
         }
 
-        // Always move forward at a constant speed
         transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+
+        // If boost is still going, continue
+        if (timeSinceBoost < boostDuration)
+        {
+            return;
+        }
 
         // Move sideways with A and D keys without rotation
         float horizontalInput = Input.GetAxis("Horizontal");
         transform.Translate(-1 * Vector3.right * horizontalInput * sideSpeed * Time.deltaTime);
 
-        // Speed boost with S key
+        if (!(Input.GetKey(KeyCode.S) & Input.GetKey(KeyCode.W))) {
+            moveSpeed = originalMoveSpeed;
+        }
+
+        // move forward with S key
         if (Input.GetKey(KeyCode.S))
         {
-            moveSpeed = boostSpeed;
-            boostEndTime = Time.time + boostDuration;
+            moveSpeed = forwardSpeed;
         }
 
         // Slow down with W key
         if (Input.GetKey(KeyCode.W))
         {
-            moveSpeed = originalMoveSpeed - boostAdd;
+            moveSpeed = slowSpeed;
         }
-        else if (Time.time > boostEndTime) // Only reset if not boosting
-        {
-            moveSpeed = originalMoveSpeed; // Reset to original speed if S is not pressed
+
+        // Boost
+        if (Input.GetKey(KeyCode.Space) & timeSinceBoost >= boostDuration + boostCooldown) {
+            timeSinceBoost = 0;
+            moveSpeed += (boostMultiplier - 1) * (moveSpeed - originalMoveSpeed);
         }
     }
 
