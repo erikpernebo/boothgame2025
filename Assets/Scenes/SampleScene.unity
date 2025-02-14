@@ -233,9 +233,12 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Tell Erik To Die
       m_Flags: 0
-  sideSpeed: 8
-  boostAdd: 7
-  boostDuration: 0.01
+  sideSpeed: 12
+  forwardAdd: 10
+  slowAdd: 15
+  boostDuration: 0.2
+  boostCooldown: 1
+  boostMultiplier: 2.3
 --- !u!136 &295883076
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -321,8 +324,8 @@ Transform:
   m_GameObject: {fileID: 295883073}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.02, y: 1.08, z: -52.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.02, y: 2, z: -52.3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -478,7 +481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1361175837}
-  offset: {x: 0, y: 20, z: 36}
+  offset: {x: 0, y: 28, z: 45}
   lookOffset: {x: 0, y: -10, z: 0}
 --- !u!1 &832575517
 GameObject:

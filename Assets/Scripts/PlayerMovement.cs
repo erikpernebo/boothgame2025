@@ -54,17 +54,19 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+        // Move forwards
         transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
-
-        // If boost is still going, continue
-        if (timeSinceBoost < boostDuration)
-        {
-            return;
-        }
 
         // Move sideways with A and D keys without rotation
         float horizontalInput = Input.GetAxis("Horizontal");
         transform.Translate(-1 * Vector3.right * horizontalInput * sideSpeed * Time.deltaTime);
+
+        // If boost is still going, continue
+        if (timeSinceBoost < boostDuration)
+        {
+            transform.Translate(-1 * Vector3.right * horizontalInput * sideSpeed * Time.deltaTime * (boostMultiplier - 1));
+            return;
+        }
 
         if (!(Input.GetKey(KeyCode.S) & Input.GetKey(KeyCode.W))) {
             moveSpeed = originalMoveSpeed;
