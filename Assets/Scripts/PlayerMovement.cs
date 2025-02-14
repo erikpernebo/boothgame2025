@@ -62,10 +62,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        // Move sideways with A and D keys without rotation
-        float horizontalInput = Input.GetAxis("Horizontal");
-        transform.Translate(-1 * Vector3.right * horizontalInput * sideSpeed * Time.deltaTime);
-
         if (!(Input.GetKey(KeyCode.S) & Input.GetKey(KeyCode.W))) {
             moveSpeed = originalMoveSpeed;
         }
