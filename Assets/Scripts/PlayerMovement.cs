@@ -1,45 +1,33 @@
 using UnityEngine;
-using System.Collections;
-
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public InputActionMap gameplayActions;
-    public static float moveSpeed = 10f;  // Speed at which the player moves forward
-    public float sideSpeed = 3f;  // Speed for sideways movement
-    
+    public float moveSpeed = 10f;
+    public float sideSpeed = 3f;
+
     [SerializeField]
-    private float forwardAdd = 10f; // Speed during forward
+    private float forwardAdd = 10f; // Extra speed when boosting
     [SerializeField]
-    private float slowAdd = 15f; // Speed during slow
+    private float slowAdd = 15f; // Speed reduction when slowing
     [SerializeField]
     private float boostDuration = 1f;
     [SerializeField]
     private float boostCooldown = 1f;
     [SerializeField]
     private float boostMultiplier = 2f;
+
     private float forwardSpeed;
     private float slowSpeed;
-    private bool isSliding = false; // Flag to check if the player is sliding
-    private bool isStopped = false; // Flag to check if the player is stopped
-    private float originalMoveSpeed; // Store the original move speed
+    private bool isBoosting = false;
+    private float originalMoveSpeed;
     private float timeSinceBoost;
 
-    void Awake()
-    {
-        gameplayActions.Enable();
-
-        gameplayActions["Crouch"].performed += ctx => 
-            {
-                isSliding = !isSliding;
-                UpdatePlayerRotation();
-            };
-    }
+    private Vector2 movementInput;
 
     void Start()
     {
-        originalMoveSpeed = moveSpeed; // Store the original move speed
+        originalMoveSpeed = moveSpeed;
         forwardSpeed = moveSpeed + forwardAdd;
         slowSpeed = originalMoveSpeed - slowAdd;
         timeSinceBoost = boostDuration + boostCooldown;
@@ -47,71 +35,56 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        timeSinceBoost += Time.deltaTime;
+        timeSinceBoost += Time.deltaTime;   
 
-        // If the player is stopped, don't move
-        if (isStopped) {
-            return;
-        }
-
-        // Move forwards
-        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
-
-        // Move sideways with A and D keys without rotation
-        float horizontalInput = Input.GetAxis("Horizontal");
-        transform.Translate(-1 * Vector3.right * horizontalInput * sideSpeed * Time.deltaTime);
-
-        // If boost is still going, continue
-        if (timeSinceBoost < boostDuration)
+        // Reset speed unless actively boosting
+        if (!(movementInput.y > 0 && movementInput.y < 0))
         {
-            transform.Translate(-1 * Vector3.right * horizontalInput * sideSpeed * Time.deltaTime * (boostMultiplier - 1));
-            return;
-        }
-
-        if (!(Input.GetKey(KeyCode.S) & Input.GetKey(KeyCode.W))) {
             moveSpeed = originalMoveSpeed;
         }
 
-        // move forward with S key
-        if (Input.GetKey(KeyCode.S))
+        // Move forward when pressing "S"
+        if (movementInput.y < 0)
         {
             moveSpeed = forwardSpeed;
         }
 
-        // Slow down with W key
-        if (Input.GetKey(KeyCode.W))
+        // Slow down when pressing "W"
+        if (movementInput.y > 0)
         {
             moveSpeed = slowSpeed;
         }
 
-        // Boost
-        if (Input.GetKey(KeyCode.Space) & timeSinceBoost >= boostDuration + boostCooldown) {
-            timeSinceBoost = 0;
-            moveSpeed += (boostMultiplier - 1) * (moveSpeed - originalMoveSpeed);
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        // Check if the player collides with an arrow
-        if (collision.gameObject.CompareTag("Arrow"))
+        // Reset boost
+        if (timeSinceBoost >= boostDuration)
         {
-            LayDown();
+            isBoosting = false;
         }
+
+        // Move the player
+        float boostFactor;
+        if (isBoosting)
+        {
+            boostFactor = boostMultiplier;
+        } else {
+            boostFactor = 1;
+        }
+
+        Vector3 move = new Vector3(-(movementInput.x * sideSpeed), 0, moveSpeed) * Time.deltaTime * boostFactor;
+        transform.Translate(move);
     }
 
-    public void LayDown()
+    public void OnMove(InputAction.CallbackContext context)
     {
-        // Stop the player from moving
-        isStopped = true;
-        UpdatePlayerRotation();
-        Debug.Log("Player hit by an arrow and laid down.");
+        movementInput = context.ReadValue<Vector2>();
     }
 
-    private void UpdatePlayerRotation()
+    public void OnBoost(InputAction.CallbackContext context)
     {
-        // Update rotation based on current state
-        float zRotation = isSliding || isStopped ? 90f : 0f;
-        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, zRotation);
+        if (context.performed && timeSinceBoost >= boostDuration + boostCooldown)
+        {
+            isBoosting = true;
+            timeSinceBoost = 0;
+        }
     }
 }
