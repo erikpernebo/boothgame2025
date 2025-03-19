@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class ArrowTrap : MonoBehaviour
+public class ArrowTrap1 : MonoBehaviour
 {
     public GameObject arrowPrefab; // Assign the arrow prefab in the Inspector
     public Transform[] firePoints; // Assign multiple positions where the arrows will spawn
