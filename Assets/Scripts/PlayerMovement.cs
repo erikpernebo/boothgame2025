@@ -3,9 +3,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 10f;
+    [SerializeField]
     public float sideSpeed = 3f;
-
     [SerializeField]
     private float forwardAdd = 10f; // Extra speed when boosting
     [SerializeField]
@@ -17,42 +16,39 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float boostMultiplier = 2f;
 
-    private float forwardSpeed;
-    private float slowSpeed;
     private bool isBoosting = false;
-    private float originalMoveSpeed;
     private float timeSinceBoost;
 
     private Vector2 movementInput;
+    private float baseSpeed = CameraFollow.cameraSpeed;
 
     void Start()
     {
-        originalMoveSpeed = moveSpeed;
-        forwardSpeed = moveSpeed + forwardAdd;
-        slowSpeed = originalMoveSpeed - slowAdd;
+        // Allows boosting on start
         timeSinceBoost = boostDuration + boostCooldown;
     }
 
     void Update()
     {
-        timeSinceBoost += Time.deltaTime;   
+        timeSinceBoost += Time.deltaTime;
+        float moveSpeed = 0;
 
         // Reset speed unless actively boosting
         if (!(movementInput.y > 0 && movementInput.y < 0))
         {
-            moveSpeed = originalMoveSpeed;
+            moveSpeed = 0;
         }
 
         // Move forward when pressing "S"
         if (movementInput.y < 0)
         {
-            moveSpeed = forwardSpeed;
+            moveSpeed = forwardAdd;
         }
 
         // Slow down when pressing "W"
         if (movementInput.y > 0)
         {
-            moveSpeed = slowSpeed;
+            moveSpeed = -slowAdd;
         }
 
         // Reset boost
@@ -70,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
             boostFactor = 1;
         }
 
-        Vector3 move = new Vector3(-(movementInput.x * sideSpeed), 0, moveSpeed) * Time.deltaTime * boostFactor;
+        Vector3 move = new Vector3(-boostFactor * (movementInput.x * sideSpeed), 0, baseSpeed + boostFactor * moveSpeed) * Time.deltaTime;
         transform.Translate(move);
     }
 
