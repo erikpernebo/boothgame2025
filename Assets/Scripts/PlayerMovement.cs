@@ -3,18 +3,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField]
-    public float sideSpeed = 3f;
-    [SerializeField]
-    private float forwardAdd = 10f; // Extra speed when boosting
-    [SerializeField]
-    private float slowAdd = 15f; // Speed reduction when slowing
-    [SerializeField]
-    private float boostDuration = 1f;
-    [SerializeField]
-    private float boostCooldown = 1f;
-    [SerializeField]
-    private float boostMultiplier = 2f;
+    [SerializeField] public float sideSpeed = 3f;
+    [SerializeField] private float forwardAdd = 10f; // Extra speed when boosting
+    [SerializeField] private float slowAdd = 15f; // Speed reduction when slowing
+    [SerializeField] private float boostDuration = 1f;
+    [SerializeField] private float boostCooldown = 1f;
+    [SerializeField] private float boostMultiplier = 2f;
 
     private bool isBoosting = false;
     private float timeSinceBoost;
@@ -30,14 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        timeSinceBoost += Time.deltaTime;
         float moveSpeed = 0;
-
-        // Reset speed unless actively boosting
-        if (!(movementInput.y > 0 && movementInput.y < 0))
-        {
-            moveSpeed = 0;
-        }
 
         // Move forward when pressing "S"
         if (movementInput.y < 0)
@@ -50,6 +37,8 @@ public class PlayerMovement : MonoBehaviour
         {
             moveSpeed = -slowAdd;
         }
+
+        timeSinceBoost += Time.deltaTime;
 
         // Reset boost
         if (timeSinceBoost >= boostDuration)
@@ -65,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
         } else {
             boostFactor = 1;
         }
-
+        Debug.Log(boostFactor);
         Vector3 move = new Vector3(-boostFactor * (movementInput.x * sideSpeed), 0, baseSpeed + boostFactor * moveSpeed) * Time.deltaTime;
         transform.Translate(move);
     }

@@ -247,13 +247,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266fa710517c14f4ab00ed2d2c006b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
   sideSpeed: 12
   forwardAdd: 10
-  slowAdd: 15
+  slowAdd: 18
   boostDuration: 0.2
   boostCooldown: 1
-  boostMultiplier: 2.3
+  boostMultiplier: 5
 --- !u!136 &295883076
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -981,7 +980,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d873f0ec2a81e4e3882e556b14a4f0e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 11
   rotationSpeed: 8000
 --- !u!1 &1161520743
 GameObject:
