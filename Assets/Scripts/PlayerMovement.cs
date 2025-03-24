@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
         } else {
             boostFactor = 1;
         }
-        Debug.Log(boostFactor);
+
         Vector3 move = new Vector3(-boostFactor * (movementInput.x * sideSpeed), 0, baseSpeed + boostFactor * moveSpeed) * Time.deltaTime;
         transform.Translate(move);
     }
