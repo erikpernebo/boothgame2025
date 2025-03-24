@@ -13,7 +13,7 @@ public class Arrow : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         // Check if the arrow hits something
-        Debug.Log("Arrow hit: " + collision.gameObject.name);
+        //Debug.Log("Arrow hit: " + collision.gameObject.name);
 
         // Destroy the arrow on collision
         Destroy(gameObject);

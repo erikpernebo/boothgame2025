@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
         // Allows boosting on start
         timeSinceBoost = boostDuration + boostCooldown;
     }
-
+    
     void Update()
     {
         float moveSpeed = 0;
