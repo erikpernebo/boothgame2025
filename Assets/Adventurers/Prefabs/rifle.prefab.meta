@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 78d62902a8a844e4d8b1ba66f95455b6
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/rifle.prefab
+  uploadId: 410653

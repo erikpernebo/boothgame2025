@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 66813de2cb2a4ad478ce3ace6e0f11ad
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/whip.prefab
+  uploadId: 410653

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 003da1c948a32d44887358162dfec7d1
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/Adventurer_1.prefab
+  uploadId: 410653

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0246968edeb0f624babc6f4d1e69b10c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/Torch.prefab
+  uploadId: 410653

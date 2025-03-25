@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f94b933a788d1724baed15493a66a897
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/notebook.prefab
+  uploadId: 410653

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 91e6cd7cda2dbcb499eb93056d105a35
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/Crossbow.prefab
+  uploadId: 410653

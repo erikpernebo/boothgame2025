@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4887057a5319e9d458bfd45a2849fd1e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/Cartograph.prefab
+  uploadId: 410653

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4e4ca048bf6184a4896cec8256faa038
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/Profesor.prefab
+  uploadId: 410653

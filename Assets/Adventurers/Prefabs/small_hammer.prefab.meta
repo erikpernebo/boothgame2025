@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 320eb045dc3722a4e87edd3bc180b225
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/small_hammer.prefab
+  uploadId: 410653

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: adabbdf90c4097341bc4dc3c0ea53d6c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/pipe.prefab
+  uploadId: 410653

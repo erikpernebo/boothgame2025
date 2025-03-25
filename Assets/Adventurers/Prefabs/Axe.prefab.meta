@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 38cede3444df27a4bbf820f5528eddd8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/Axe.prefab
+  uploadId: 410653

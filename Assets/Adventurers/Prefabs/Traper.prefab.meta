@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1e81e7d60cb759240bec79156a0895ca
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 186821
+  packageName: LOWPOLY - Adventurers
+  packageVersion: 1.0
+  assetPath: Assets/Adventurers/Prefabs/Traper.prefab
+  uploadId: 410653
