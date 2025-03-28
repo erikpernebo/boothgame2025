@@ -1800,7 +1800,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sideSpeed: 12
   forwardAdd: 10
-  slowAdd: 15
+  slowAdd: 30
   boostDuration: 0.2
   boostCooldown: 1
   boostMultiplier: 5

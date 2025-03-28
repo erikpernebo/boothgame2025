@@ -17,7 +17,8 @@ public class PlayerMovement : MonoBehaviour
     int isSprintingHash; 
     int isSlowJoggingHash;
     int isRightHash;
-
+    int isLeftStrafeHash;
+    int isBoostHash;
     private Vector2 movementInput;
     private float baseSpeed = CameraFollow.cameraSpeed;
     float xVal;
@@ -32,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
         isSprintingHash = Animator.StringToHash("isSprinting");
         isSlowJoggingHash = Animator.StringToHash("isSlowJogging");
         isRightHash = Animator.StringToHash("right");
+        isLeftStrafeHash = Animator.StringToHash("strafeLeft");
+        isBoostHash = Animator.StringToHash("isDash");
     }
     
     void Update()
@@ -53,6 +56,12 @@ public class PlayerMovement : MonoBehaviour
         timeSinceBoost += Time.deltaTime;
 
         // Reset boost
+
+        float dashAnimationTime = 0.2f;
+
+        if (timeSinceBoost >= dashAnimationTime){
+            animator.SetBool(isBoostHash, false);
+        }
         if (timeSinceBoost >= boostDuration)
         {
             isBoosting = false;
@@ -85,24 +94,26 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isSprintingHash, false);
             animator.SetBool(isSlowJoggingHash, false);
             animator.SetBool(isRightHash, false);
+            animator.SetBool(isLeftStrafeHash, false);
         }
 
         
     }
 
     void handleMovement(){
-        bool isSprinting = animator.GetBool(isSprintingHash);
-        bool isSlowJogging = animator.GetBool(isSlowJoggingHash);
-        bool isRight = animator.GetBool(isRightHash);
+        animator.SetBool(isSprintingHash, false);
+        animator.SetBool(isSlowJoggingHash, false);
+        animator.SetBool(isRightHash, false);
+        animator.SetBool(isLeftStrafeHash, false);
 
-
-        if (xVal == 0 && yVal == -1 && !isSprinting){
+        if (xVal == 0 && yVal == -1){
             animator.SetBool(isSprintingHash, true);
-        } else if (xVal == 0 && yVal == 1 && !isSlowJogging){
+        } else if (xVal == 0 && yVal == 1){
             animator.SetBool(isSlowJoggingHash, true);
-        } else if (((xVal == 1 && yVal != 1) || (xVal == 0.71 && yVal == -0.71)) && !isRight){
-            animator.SetBool(isSprintingHash, false);
+        } else if (((xVal == -1 && yVal != 1) || (xVal == -0.71 && yVal == -0.71))){
             animator.SetBool(isRightHash, true);
+        } else if (((xVal == 1 && yVal != 1) || (xVal == 0.71 && yVal == -0.71))){
+            animator.SetBool(isLeftStrafeHash, true);
         }
     }
     
@@ -113,6 +124,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isBoosting = true;
             timeSinceBoost = 0;
+            animator.SetBool(isBoostHash, true);
         }
     }
 }
