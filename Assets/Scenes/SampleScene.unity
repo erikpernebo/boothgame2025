@@ -899,6 +899,9 @@ MonoBehaviour:
   boostDuration: 0.2
   boostCooldown: 1
   boostMultiplier: 5
+  invincible: 0
+  flashMaterial: {fileID: 0}
+  flashInterval: 0.1
 --- !u!136 &971820430
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1277,6 +1280,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2547644388494029198, guid: 02b00436ed44c4c38b297d1397210bb4, type: 3}
+      propertyPath: m_ProvidesContacts
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4529895577319502665, guid: 02b00436ed44c4c38b297d1397210bb4, type: 3}
       propertyPath: m_LocalScale.x
       value: 4
@@ -1781,7 +1788,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 839208137}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c3e25b791e64348e18337226ff3a81ee, type: 3}
   m_Name: 
@@ -1804,6 +1811,9 @@ MonoBehaviour:
   boostDuration: 0.2
   boostCooldown: 1
   boostMultiplier: 5
+  invincible: 0
+  flashMaterial: {fileID: 2100000, guid: a284ff5ad66a74162b207eb3d153e811, type: 2}
+  flashInterval: 0.1
 --- !u!1 &1633959114
 GameObject:
   m_ObjectHideFlags: 0

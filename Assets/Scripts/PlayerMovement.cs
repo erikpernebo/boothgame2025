@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -19,10 +20,19 @@ public class PlayerMovement : MonoBehaviour
     int isRightHash;
     int isLeftStrafeHash;
     int isBoostHash;
+    int isStunnedHash;
     private Vector2 movementInput;
     private float baseSpeed = CameraFollow.cameraSpeed;
     float xVal;
     float yVal;
+    private float trapHitTimer = 0f;
+    public bool invincible = false;
+    
+    private Renderer[] characterRenderers;
+    private Material[] originalMaterials;
+    [SerializeField] private Material flashMaterial; // Assign a white material in the inspector
+    [SerializeField] private float flashInterval = 0.1f;
+
     void Start()
     {
         // Allows boosting on start
@@ -30,11 +40,19 @@ public class PlayerMovement : MonoBehaviour
 
         animator = GetComponent<Animator>();
 
+        characterRenderers = GetComponentsInChildren<Renderer>();
+        originalMaterials = new Material[characterRenderers.Length];
+        for (int i = 0; i < characterRenderers.Length; i++)
+        {
+            originalMaterials[i] = characterRenderers[i].material;
+        }
+
         isSprintingHash = Animator.StringToHash("isSprinting");
         isSlowJoggingHash = Animator.StringToHash("isSlowJogging");
         isRightHash = Animator.StringToHash("right");
         isLeftStrafeHash = Animator.StringToHash("strafeLeft");
         isBoostHash = Animator.StringToHash("isDash");
+        isStunnedHash = Animator.StringToHash("isStunned");
     }
     
     void Update()
@@ -67,17 +85,33 @@ public class PlayerMovement : MonoBehaviour
             isBoosting = false;
         }
 
-        // Move the player
-        float boostFactor;
-        if (isBoosting)
-        {
-            boostFactor = boostMultiplier;
-        } else {
-            boostFactor = 1;
-        }
 
-        Vector3 move = new Vector3(-boostFactor * (movementInput.x * sideSpeed), 0, baseSpeed + boostFactor * moveSpeed) * Time.deltaTime;
-        transform.Translate(move);
+       
+        bool stunned = animator.GetBool(isStunnedHash);
+        if (invincible)
+        {
+            trapHitTimer += Time.deltaTime;
+            if (trapHitTimer >= 1.0f && stunned)
+            {
+                animator.SetBool(isStunnedHash, false);
+            }
+            if (trapHitTimer >= 2.0f)
+            {
+                invincible = false;
+                trapHitTimer = 0f; 
+            }
+        } 
+        if (!stunned){
+            float boostFactor;
+            if (isBoosting)
+            {
+                boostFactor = boostMultiplier;
+            } else {
+                boostFactor = 1;
+            }
+            Vector3 move = new Vector3(-boostFactor * (movementInput.x * sideSpeed), 0, baseSpeed + boostFactor * moveSpeed) * Time.deltaTime;
+            transform.Translate(move);
+        }
 
         handleMovement();
     }
@@ -120,11 +154,66 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnBoost(InputAction.CallbackContext context)
     {
-        if (context.performed && timeSinceBoost >= boostDuration + boostCooldown)
+        if (context.performed && timeSinceBoost >= boostDuration + boostCooldown && !animator.GetBool(isStunnedHash))
         {
             isBoosting = true;
             timeSinceBoost = 0;
             animator.SetBool(isBoostHash, true);
         }
+    }
+    private void OnTriggerEnter(Collider collision)
+    {   
+        
+        if (collision.gameObject.CompareTag("Arrow") && !invincible)
+        {
+            Debug.Log("PLAYER SHOT BY ARROW");
+            animator.SetBool(isStunnedHash, true);
+            trapHitTimer = 0f;  
+            invincible = true;
+            if(flashMaterial != null)
+                StartCoroutine(FlashWhiteWhileStunned());
+        } else if (collision.gameObject.CompareTag("Spike") && !invincible){
+            Debug.Log("PLAYER HIT BY SPIKE");
+            animator.SetBool(isStunnedHash, true);
+            trapHitTimer = 0f;  
+            invincible = true;
+            if(flashMaterial != null)
+                StartCoroutine(FlashWhiteWhileStunned());
+        } else if (collision.gameObject.CompareTag("Axe") && !invincible){
+            Debug.Log("PLAYER BIT BY AXE");
+            animator.SetBool(isStunnedHash, true);
+            trapHitTimer = 0f;  
+            invincible = true;
+            if(flashMaterial != null)
+                StartCoroutine(FlashWhiteWhileStunned());
+        }
+    }
+    IEnumerator FlashWhiteWhileStunned()
+    {
+        float flashDuration = 1.8f; // Total flash time (match invincibility duration)
+        float elapsedTime = 0f;
+        while (elapsedTime < flashDuration)
+        {
+            // Set flash material on all renderers.
+            for (int i = 0; i < characterRenderers.Length; i++)
+            {
+                characterRenderers[i].material = flashMaterial;
+            }
+            yield return new WaitForSeconds(flashInterval);
+            elapsedTime += flashInterval;
+            // Reset each renderer's material back to original.
+            for (int i = 0; i < characterRenderers.Length; i++)
+            {
+                characterRenderers[i].material = originalMaterials[i];
+            }
+            yield return new WaitForSeconds(flashInterval);
+            elapsedTime += flashInterval;
+        }
+        // Final reset after flashing stops.
+        for (int i = 0; i < characterRenderers.Length; i++)
+        {
+            characterRenderers[i].material = originalMaterials[i];
+        }
+
     }
 }
