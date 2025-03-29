@@ -2,11 +2,23 @@ using UnityEngine;
 
 public class Idol : MonoBehaviour
 {
+    public static Idol Instance { get; private set; }
+
     public float carryHeight = 2f;  // How high the idol floats above the player
     public Transform boulder;       // Reference to the boulder
     public float zRespawnOffset = 20f;  // Offset in front of boulder when respawning
 
-    private Transform idolHolder = null;  // The current player holding the idol
+    public Transform idolHolder = null;  // The current player holding the idol
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     private void Start()
     {

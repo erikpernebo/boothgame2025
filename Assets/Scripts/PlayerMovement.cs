@@ -216,6 +216,14 @@ public class PlayerMovement : MonoBehaviour
             trapHitTimer = 0;
         }
 
+        if (collision.gameObject.CompareTag("Player") && timeSinceBoost < boostDuration)
+        {
+            if (Idol.Instance.idolHolder == collision.transform)
+            {
+                // Transfer the idol
+                Idol.Instance.PickUpIdol(transform);
+            }
+        }
     }
     IEnumerator FlashWhiteWhileStunned()
     {
