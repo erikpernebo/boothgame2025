@@ -92,7 +92,16 @@ public class PlayerMovement : MonoBehaviour
         if (invincible || dying)
         {                 
             trapHitTimer += Time.deltaTime;
-            if (invincible){
+            if (invincible && dying){
+               if (trapHitTimer < 2){
+                Vector3 move = new Vector3(0, 0, baseSpeed*.7f + moveSpeed*.7f) * Time.deltaTime;
+                transform.Translate(move); 
+                }
+                if (trapHitTimer >= 3f){
+                    gameObject.SetActive(false);
+                } 
+            }
+            else if (invincible){
                 if (trapHitTimer >= 1.0f && stunned)
                 {
                     animator.SetBool(isStunnedHash, false);
@@ -102,9 +111,9 @@ public class PlayerMovement : MonoBehaviour
                     invincible = false;
                     trapHitTimer = 0f; 
                 }
-            } else{
+            } else {
                 if (trapHitTimer < 2){
-                Vector3 move = new Vector3(0, 0, baseSpeed + moveSpeed) * Time.deltaTime;
+                Vector3 move = new Vector3(0, 0, baseSpeed*.7f + moveSpeed*.7f) * Time.deltaTime;
                 transform.Translate(move); 
                 }
                 if (trapHitTimer >= 3f){
