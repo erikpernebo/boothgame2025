@@ -21,12 +21,14 @@ public class PlayerMovement : MonoBehaviour
     int isLeftStrafeHash;
     int isBoostHash;
     int isStunnedHash;
+    int isDyingHash;
     private Vector2 movementInput;
     private float baseSpeed = CameraFollow.cameraSpeed;
     float xVal;
     float yVal;
     private float trapHitTimer = 0f;
     public bool invincible = false;
+    private bool dying = false;
     
     private Renderer[] characterRenderers;
     private Material[] originalMaterials;
@@ -53,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
         isLeftStrafeHash = Animator.StringToHash("strafeLeft");
         isBoostHash = Animator.StringToHash("isDash");
         isStunnedHash = Animator.StringToHash("isStunned");
+        isDyingHash = Animator.StringToHash("isDying");
     }
     
     void Update()
@@ -84,24 +87,32 @@ public class PlayerMovement : MonoBehaviour
         {
             isBoosting = false;
         }
-
-
        
         bool stunned = animator.GetBool(isStunnedHash);
-        if (invincible)
-        {
+        if (invincible || dying)
+        {                 
             trapHitTimer += Time.deltaTime;
-            if (trapHitTimer >= 1.0f && stunned)
-            {
-                animator.SetBool(isStunnedHash, false);
-            }
-            if (trapHitTimer >= 2.0f)
-            {
-                invincible = false;
-                trapHitTimer = 0f; 
+            if (invincible){
+                if (trapHitTimer >= 1.0f && stunned)
+                {
+                    animator.SetBool(isStunnedHash, false);
+                }
+                if (trapHitTimer >= 2.0f)
+                {
+                    invincible = false;
+                    trapHitTimer = 0f; 
+                }
+            } else{
+                if (trapHitTimer < 2){
+                Vector3 move = new Vector3(0, 0, baseSpeed + moveSpeed) * Time.deltaTime;
+                transform.Translate(move); 
+                }
+                if (trapHitTimer >= 3f){
+                    gameObject.SetActive(false);
+                }
             }
         } 
-        if (!stunned){
+        if (!stunned && !dying){
             float boostFactor;
             if (isBoosting)
             {
@@ -113,16 +124,17 @@ public class PlayerMovement : MonoBehaviour
             transform.Translate(move);
         }
 
-        handleMovement();
+        if (!dying) handleMovement();
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
         movementInput = context.ReadValue<Vector2>();
-        Debug.Log(movementInput);
 
         xVal = movementInput.x;
         yVal = movementInput.y;
+        Debug.Log(string.Format("xVal: {0}, yVal: {1}", xVal, yVal));
+
 
         if (xVal == 0 && yVal == 0) {
             animator.SetBool(isSprintingHash, false);
@@ -144,9 +156,9 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isSprintingHash, true);
         } else if (xVal == 0 && yVal == 1){
             animator.SetBool(isSlowJoggingHash, true);
-        } else if (((xVal == -1 && yVal != 1) || (xVal == -0.71 && yVal == -0.71))){
+        } else if (((xVal == -1 && yVal != 1) || (xVal < -0.70 && xVal > -0.71 && yVal < -0.70 && yVal > -.71))){
             animator.SetBool(isRightHash, true);
-        } else if (((xVal == 1 && yVal != 1) || (xVal == 0.71 && yVal == -0.71))){
+        } else if (((xVal == 1 && yVal != 1) || (xVal < 0.71 && xVal > 0.70 && yVal < -0.70 && yVal > -.71))){
             animator.SetBool(isLeftStrafeHash, true);
         }
     }
@@ -163,7 +175,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnTriggerEnter(Collider collision)
     {   
-        
+        if (dying) return; 
         if (collision.gameObject.CompareTag("Arrow") && !invincible)
         {
             Debug.Log("PLAYER SHOT BY ARROW");
@@ -184,9 +196,17 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isStunnedHash, true);
             trapHitTimer = 0f;  
             invincible = true;
-            if(flashMaterial != null)
+            if(flashMaterial != null){
                 StartCoroutine(FlashWhiteWhileStunned());
+            }
+        } else if (collision.gameObject.CompareTag("Boulder")){
+            Debug.Log("Crushed By Boulder");
+            dying = true;
+            animator.SetBool(isStunnedHash, false); 
+            animator.SetTrigger("Dying");
+            trapHitTimer = 0;
         }
+
     }
     IEnumerator FlashWhiteWhileStunned()
     {
