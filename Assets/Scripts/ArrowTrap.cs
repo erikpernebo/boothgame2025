@@ -66,4 +66,13 @@ public class ArrowTrap : MonoBehaviour
             Debug.LogError("Arrow prefab does not have a Rigidbody!");
         }
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Check if the collided object has the tag "Wall".
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            // Destroy the arrow.
+            Destroy(gameObject);
+        }
+    }
 }

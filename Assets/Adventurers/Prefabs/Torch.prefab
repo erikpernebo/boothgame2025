@@ -132,8 +132,8 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 1, g: 0.54901963, b: 0, a: 1}
-  m_Intensity: 90
-  m_Range: 60
+  m_Intensity: 105
+  m_Range: 75
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615d646517fb946b4ac6c73b0a9acd24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minIntensity: 75
-  maxIntensity: 105
+  minIntensity: 85
+  maxIntensity: 125
   minFlickerDuration: 0.05
   maxFlickerDuration: 0.15

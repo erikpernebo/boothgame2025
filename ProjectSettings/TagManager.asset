@@ -9,6 +9,7 @@ TagManager:
   - Axe
   - Boulder
   - FireTrap
+  - Wall
   layers:
   - Default
   - TransparentFX
