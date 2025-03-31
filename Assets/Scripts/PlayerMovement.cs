@@ -11,6 +11,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float boostDuration = 1f;
     [SerializeField] private float boostCooldown = 1f;
     [SerializeField] private float boostMultiplier = 2f;
+    
+    // Add these fields for the side borders.
+    [SerializeField] private float leftBoundary = -10f;
+    [SerializeField] private float rightBoundary = 10f;
 
     private bool isBoosting = false;
     private float timeSinceBoost;
@@ -79,10 +83,9 @@ public class PlayerMovement : MonoBehaviour
         timeSinceBoost += Time.deltaTime;
 
         // Reset boost
-
         float dashAnimationTime = 0.2f;
-
-        if (timeSinceBoost >= dashAnimationTime){
+        if (timeSinceBoost >= dashAnimationTime)
+        {
             animator.SetBool(isBoostHash, false);
         }
         if (timeSinceBoost >= boostDuration)
@@ -94,16 +97,20 @@ public class PlayerMovement : MonoBehaviour
         if (invincible || dying)
         {                 
             trapHitTimer += Time.deltaTime;
-            if (invincible && dying){
-                if (trapHitTimer < 2){
-                    Vector3 move = new Vector3(0, 0, baseSpeed*.7f + moveSpeed*.7f) * Time.deltaTime;
+            if (invincible && dying)
+            {
+                if (trapHitTimer < 2)
+                {
+                    Vector3 move = new Vector3(0, 0, baseSpeed * .7f + moveSpeed * .7f) * Time.deltaTime;
                     transform.Translate(move);
                 }
-                if (trapHitTimer >= 3f){
+                if (trapHitTimer >= 3f)
+                {
                     gameObject.SetActive(false);
                 } 
             }
-            else if (invincible){
+            else if (invincible)
+            {
                 if (trapHitTimer >= 1.0f && stunned)
                 {
                     animator.SetBool(isStunnedHash, false);
@@ -113,24 +120,23 @@ public class PlayerMovement : MonoBehaviour
                     invincible = false;
                     trapHitTimer = 0f; 
                 }
-            } else {
-                if (trapHitTimer < 2){
-                    Vector3 move = new Vector3(0, 0, baseSpeed*.7f + moveSpeed*.7f) * Time.deltaTime;
+            }
+            else
+            {
+                if (trapHitTimer < 2)
+                {
+                    Vector3 move = new Vector3(0, 0, baseSpeed * .7f + moveSpeed * .7f) * Time.deltaTime;
                     transform.Translate(move); 
                 }
-                if (trapHitTimer >= 3f){
+                if (trapHitTimer >= 3f)
+                {
                     gameObject.SetActive(false);
                 }
             }
         } 
-        if (!stunned && !dying){
-            float boostFactor;
-            if (isBoosting)
-            {
-                boostFactor = boostMultiplier;
-            } else {
-                boostFactor = 1;
-            }
+        if (!stunned && !dying)
+        {
+            float boostFactor = isBoosting ? boostMultiplier : 1;
             Vector3 move = new Vector3(-boostFactor * (movementInput.x * sideSpeed), 0, baseSpeed + boostFactor * moveSpeed) * Time.deltaTime;
             transform.Translate(move);
 
@@ -142,7 +148,15 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (!dying) handleMovement();
+        if (!dying)
+        {
+            handleMovement();
+        }
+        
+        // Clamp the player's x position so they don't go beyond the side borders.
+        Vector3 clampedPos = transform.position;
+        clampedPos.x = Mathf.Clamp(clampedPos.x, leftBoundary, rightBoundary);
+        transform.position = clampedPos;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -152,34 +166,40 @@ public class PlayerMovement : MonoBehaviour
         xVal = movementInput.x;
         yVal = movementInput.y;
 
-        if (xVal == 0 && yVal == 0) {
+        if (xVal == 0 && yVal == 0)
+        {
             animator.SetBool(isSprintingHash, false);
             animator.SetBool(isSlowJoggingHash, false);
             animator.SetBool(isRightHash, false);
             animator.SetBool(isLeftStrafeHash, false);
         }
-
-        
     }
 
-    void handleMovement(){
+    void handleMovement()
+    {
         animator.SetBool(isSprintingHash, false);
         animator.SetBool(isSlowJoggingHash, false);
         animator.SetBool(isRightHash, false);
         animator.SetBool(isLeftStrafeHash, false);
 
-        if (xVal == 0 && yVal == -1){
+        if (xVal == 0 && yVal == -1)
+        {
             animator.SetBool(isSprintingHash, true);
-        } else if (xVal == 0 && yVal == 1){
+        }
+        else if (xVal == 0 && yVal == 1)
+        {
             animator.SetBool(isSlowJoggingHash, true);
-        } else if (((xVal == -1 && yVal != 1) || (xVal < -0.70 && xVal > -0.71 && yVal < -0.70 && yVal > -.71))){
+        }
+        else if (((xVal == -1 && yVal != 1) || (xVal < -0.70f && xVal > -0.71f && yVal < -0.70f && yVal > -0.71f)))
+        {
             animator.SetBool(isRightHash, true);
-        } else if (((xVal == 1 && yVal != 1) || (xVal < 0.71 && xVal > 0.70 && yVal < -0.70 && yVal > -.71))){
+        }
+        else if (((xVal == 1 && yVal != 1) || (xVal < 0.71f && xVal > 0.70f && yVal < -0.70f && yVal > -0.71f)))
+        {
             animator.SetBool(isLeftStrafeHash, true);
         }
     }
     
-
     public void OnBoost(InputAction.CallbackContext context)
     {
         if (context.performed && timeSinceBoost >= boostDuration + boostCooldown && !animator.GetBool(isStunnedHash) && !dying)
@@ -189,6 +209,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isBoostHash, true);
         }
     }
+    
     private void OnTriggerEnter(Collider collision)
     {   
         if (dying) return; 
@@ -200,22 +221,28 @@ public class PlayerMovement : MonoBehaviour
             invincible = true;
             if(flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
-        } else if (collision.gameObject.CompareTag("Spike") && !invincible){
+        }
+        else if (collision.gameObject.CompareTag("Spike") && !invincible)
+        {
             Debug.Log("PLAYER HIT BY SPIKE");
             animator.SetBool(isStunnedHash, true);
             trapHitTimer = 0f;  
             invincible = true;
             if(flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
-        } else if (collision.gameObject.CompareTag("Axe") && !invincible){
+        }
+        else if (collision.gameObject.CompareTag("Axe") && !invincible)
+        {
             Debug.Log("PLAYER BIT BY AXE");
             animator.SetBool(isStunnedHash, true);
             trapHitTimer = 0f;  
             invincible = true;
-            if(flashMaterial != null){
+            if(flashMaterial != null)
+            {
                 StartCoroutine(FlashWhiteWhileStunned());
             }
-        } else if (collision.gameObject.CompareTag("FireTrap") && !invincible)
+        }
+        else if (collision.gameObject.CompareTag("FireTrap") && !invincible)
         {
             Debug.Log("PLAYER HIT BY FIRE TRAP");
             animator.SetBool(isStunnedHash, true);
@@ -223,7 +250,9 @@ public class PlayerMovement : MonoBehaviour
             invincible = true;
             if(flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
-        } else if (collision.gameObject.CompareTag("Boulder")){
+        }
+        else if (collision.gameObject.CompareTag("Boulder"))
+        {
             Debug.Log("Crushed By Boulder");
             dying = true;
             animator.SetBool(isStunnedHash, false); 
@@ -240,6 +269,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    
     IEnumerator FlashWhiteWhileStunned()
     {
         float flashDuration = 1.8f; // Total flash time (match invincibility duration)
@@ -266,6 +296,5 @@ public class PlayerMovement : MonoBehaviour
         {
             characterRenderers[i].material = originalMaterials[i];
         }
-
     }
 }
