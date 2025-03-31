@@ -142,8 +142,6 @@ public class PlayerMovement : MonoBehaviour
 
         xVal = movementInput.x;
         yVal = movementInput.y;
-        Debug.Log(string.Format("xVal: {0}, yVal: {1}", xVal, yVal));
-
 
         if (xVal == 0 && yVal == 0) {
             animator.SetBool(isSprintingHash, false);

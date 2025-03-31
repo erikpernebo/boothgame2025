@@ -5648,6 +5648,50 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e93bb143e076eed42a22cbdf0b560eed, type: 3}
+--- !u!1 &1603122308
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1603122309}
+  - component: {fileID: 1603122310}
+  m_Layer: 0
+  m_Name: ArduinoController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1603122309
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603122308}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.8113819, y: 0.18196695, z: -19.515455}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1603122310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603122308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9a2580ba98c3f640831fb98f3d8a400, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1640928844
 GameObject:
   m_ObjectHideFlags: 0
@@ -7692,6 +7736,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 832575519}
   - {fileID: 1722890509}
+  - {fileID: 1603122309}
   - {fileID: 940231125}
   - {fileID: 1720044209}
   - {fileID: 2461544767335349337}
