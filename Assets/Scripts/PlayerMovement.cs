@@ -34,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
     private Material[] originalMaterials;
     [SerializeField] private Material flashMaterial; // Assign a white material in the inspector
     [SerializeField] private float flashInterval = 0.1f;
+    private float cameraOffsetMax = -15f;
+    [SerializeField] private Transform cam;
 
     void Start()
     {
@@ -93,9 +95,9 @@ public class PlayerMovement : MonoBehaviour
         {                 
             trapHitTimer += Time.deltaTime;
             if (invincible && dying){
-               if (trapHitTimer < 2){
-                Vector3 move = new Vector3(0, 0, baseSpeed*.7f + moveSpeed*.7f) * Time.deltaTime;
-                transform.Translate(move); 
+                if (trapHitTimer < 2){
+                    Vector3 move = new Vector3(0, 0, baseSpeed*.7f + moveSpeed*.7f) * Time.deltaTime;
+                    transform.Translate(move);
                 }
                 if (trapHitTimer >= 3f){
                     gameObject.SetActive(false);
@@ -113,8 +115,8 @@ public class PlayerMovement : MonoBehaviour
                 }
             } else {
                 if (trapHitTimer < 2){
-                Vector3 move = new Vector3(0, 0, baseSpeed*.7f + moveSpeed*.7f) * Time.deltaTime;
-                transform.Translate(move); 
+                    Vector3 move = new Vector3(0, 0, baseSpeed*.7f + moveSpeed*.7f) * Time.deltaTime;
+                    transform.Translate(move); 
                 }
                 if (trapHitTimer >= 3f){
                     gameObject.SetActive(false);
@@ -131,6 +133,13 @@ public class PlayerMovement : MonoBehaviour
             }
             Vector3 move = new Vector3(-boostFactor * (movementInput.x * sideSpeed), 0, baseSpeed + boostFactor * moveSpeed) * Time.deltaTime;
             transform.Translate(move);
+
+            float camZ = cam.transform.position.z;
+            if (transform.position.z > camZ + cameraOffsetMax)
+            {
+                Vector3 adjust = new Vector3(0, 0, -(transform.position.z - (camZ + cameraOffsetMax)));
+                transform.Translate(adjust);    
+            }
         }
 
         if (!dying) handleMovement();
