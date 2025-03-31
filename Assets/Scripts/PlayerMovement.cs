@@ -175,7 +175,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnBoost(InputAction.CallbackContext context)
     {
-        if (context.performed && timeSinceBoost >= boostDuration + boostCooldown && !animator.GetBool(isStunnedHash))
+        if (context.performed && timeSinceBoost >= boostDuration + boostCooldown && !animator.GetBool(isStunnedHash) && !dying)
         {
             isBoosting = true;
             timeSinceBoost = 0;
