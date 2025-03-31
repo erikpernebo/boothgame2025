@@ -215,6 +215,14 @@ public class PlayerMovement : MonoBehaviour
             if(flashMaterial != null){
                 StartCoroutine(FlashWhiteWhileStunned());
             }
+        } else if (collision.gameObject.CompareTag("FireTrap") && !invincible)
+        {
+            Debug.Log("PLAYER HIT BY FIRE TRAP");
+            animator.SetBool(isStunnedHash, true);
+            trapHitTimer = 0f;
+            invincible = true;
+            if(flashMaterial != null)
+                StartCoroutine(FlashWhiteWhileStunned());
         } else if (collision.gameObject.CompareTag("Boulder")){
             Debug.Log("Crushed By Boulder");
             dying = true;

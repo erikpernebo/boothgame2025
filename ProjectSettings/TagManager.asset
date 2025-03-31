@@ -8,6 +8,7 @@ TagManager:
   - Spike
   - Axe
   - Boulder
+  - FireTrap
   layers:
   - Default
   - TransparentFX
