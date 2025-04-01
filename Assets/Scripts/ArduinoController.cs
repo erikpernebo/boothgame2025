@@ -90,10 +90,11 @@ public class ArduinoController : MonoBehaviour
             }
             stringArray = data.Split(',');
         }
-        if (stringArray.Length != 5)
+        if (stringArray.Length != 20)
         {
             return;
         }
+        Debug.Log(data);
         for (int i = 0; i < stringArray.Length; i++) {
             List<Key> pressedKeys = new List<Key>();
             if (stringArray[0] == "1")
@@ -116,6 +117,26 @@ public class ArduinoController : MonoBehaviour
             {
                 pressedKeys.Add(Key.D);
             }
+            if (stringArray[5] == "1")
+            {
+                pressedKeys.Add(Key.RightShift);
+            }
+            if (stringArray[6] == "1")
+            {
+                pressedKeys.Add(Key.DownArrow);
+            }
+            if (stringArray[7] == "1")
+            {
+                pressedKeys.Add(Key.UpArrow);
+            }
+            if (stringArray[8] == "1")
+            {
+                pressedKeys.Add(Key.LeftArrow);
+            }
+            if (stringArray[9] == "1")
+            {
+                pressedKeys.Add(Key.RightArrow);
+            }
             KeyboardState keyboardState = new KeyboardState(pressedKeys.ToArray());
             InputSystem.QueueStateEvent(keyboard, keyboardState);
         }
@@ -131,7 +152,7 @@ public class ArduinoController : MonoBehaviour
             try
             {
                 serialPort.WriteLine(data);
-                Debug.Log("writing: " + data);
+                // Debug.Log("writing: " + data);
             }
             catch (System.Exception e)
             {

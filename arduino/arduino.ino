@@ -1,11 +1,14 @@
-#define NUM_BUTTONS 5
+#define NUM_BUTTONS 20
 #define NUM_OUTPUTS 4
 
 const int buttonPins[NUM_BUTTONS] = {
   // Button, Down, Up, Left, Right
-    5, 6, 7, 8, 9 // Player 1
+  44, 46, 48, 50, 52, // Player 1
+  45, 47, 49, 51, 53, // Player 2
+  6, 5, 4, 3, 2, // Player 3
+  13, 12, 11, 10, 9 // Player 4
 };
-const int outputPins[NUM_OUTPUTS] = {50, 51, 52, 53}; // Outputs
+const int outputPins[NUM_OUTPUTS] = {22, 23, 24, 25}; // Outputs
 bool lastInput[4] = {false, false, false, false};
 
 void setup() {
