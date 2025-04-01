@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     private float trapHitTimer = 0f;
     public bool invincible = false;
     private bool dying = false;
+    private bool dead = false;
     
     private Renderer[] characterRenderers;
     private Material[] originalMaterials;
@@ -131,6 +132,7 @@ public class PlayerMovement : MonoBehaviour
                 if (trapHitTimer >= 3f)
                 {
                     gameObject.SetActive(false);
+                    dead = true;
                 }
             }
         } 
@@ -158,6 +160,8 @@ public class PlayerMovement : MonoBehaviour
         clampedPos.x = Mathf.Clamp(clampedPos.x, leftBoundary, rightBoundary);
         transform.position = clampedPos;
     }
+
+    public bool IsDead(){return dead;}
 
     public void OnMove(InputAction.CallbackContext context)
     {
