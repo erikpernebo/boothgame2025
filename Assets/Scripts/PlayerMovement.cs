@@ -297,4 +297,9 @@ public class PlayerMovement : MonoBehaviour
             characterRenderers[i].material = originalMaterials[i];
         }
     }
+
+    public bool ableToBoost()
+    {
+        return timeSinceBoost >= boostDuration + boostCooldown;
+    }
 }

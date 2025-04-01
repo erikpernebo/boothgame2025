@@ -17,6 +17,11 @@ public class ArduinoController : MonoBehaviour
     private string data;
     private object threadLock = new object();
     private Keyboard keyboard;
+    [SerializeField] Transform player1 = null;
+    [SerializeField] Transform player2 = null;
+    [SerializeField] Transform player3 = null;
+    [SerializeField] Transform player4 = null;
+    private Transform[] players = new Transform[4];
 
     void Start()
     {
@@ -42,6 +47,10 @@ public class ArduinoController : MonoBehaviour
             Debug.LogError("Error opening serial port: " + e.Message);
         }
         keyboard = InputSystem.GetDevice<Keyboard>();
+        players[0] = player1;
+        players[1] = player2;
+        players[2] = player3;
+        players[3] = player4;
     }
 
     void ReadSerialData()
@@ -111,6 +120,39 @@ public class ArduinoController : MonoBehaviour
             InputSystem.QueueStateEvent(keyboard, keyboardState);
         }
 
+        string result = $"{GetDashStatus(1)},{GetDashStatus(2)},{GetDashStatus(3)},{GetDashStatus(4)}";
+        WriteSerialData(result);
+    }
+
+    private void WriteSerialData(string data)
+    {
+        if (serialPort != null && serialPort.IsOpen)
+        {
+            try
+            {
+                serialPort.WriteLine(data);
+                Debug.Log("writing: " + data);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Error writing to serial port: " + e.Message);
+            }
+        }
+    }
+
+    private int GetDashStatus(int playerNo) {
+        int index = playerNo - 1;
+        if (players[index] == null) {
+            return 0;
+        }
+        if (players[index].GetComponent<PlayerMovement>().ableToBoost())
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     void OnDisable()
