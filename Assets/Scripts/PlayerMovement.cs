@@ -12,9 +12,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float boostCooldown = 1f;
     [SerializeField] private float boostMultiplier = 2f;
     
-    // Add these fields for the side borders.
+    // Side boundaries.
     [SerializeField] private float leftBoundary = -10f;
     [SerializeField] private float rightBoundary = 10f;
+    
+    // Use empty GameObjects to define your diagonal barriers.
+    [SerializeField] private Transform barrier1PointA; // First barrier, first point
+    [SerializeField] private Transform barrier1PointB; // First barrier, second point
+    [SerializeField] private float barrier1Threshold = 0f; // Allowed distance for barrier 1
+
+    [SerializeField] private Transform barrier2PointA; // Second barrier, first point
+    [SerializeField] private Transform barrier2PointB; // Second barrier, second point
+    [SerializeField] private float barrier2Threshold = 0f; // Allowed distance for barrier 2
 
     private bool isBoosting = false;
     private float timeSinceBoost;
@@ -27,7 +36,11 @@ public class PlayerMovement : MonoBehaviour
     int isStunnedHash;
     int isDyingHash;
     private Vector2 movementInput;
+    // baseSpeed is initially set from CameraFollow.
     private float baseSpeed = CameraFollow.cameraSpeed;
+    // This variable will store the forced speed when control is lost.
+    private float forcedSpeed = 0f;
+    
     float xVal;
     float yVal;
     private float trapHitTimer = 0f;
@@ -44,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        // Allows boosting on start
+        // Allows boosting on start.
         timeSinceBoost = boostDuration + boostCooldown;
 
         animator = GetComponent<Animator>();
@@ -67,6 +80,29 @@ public class PlayerMovement : MonoBehaviour
     
     void Update()
     {
+        // If the player reaches or passes z = 744, capture the current speed (if not already captured)
+        // and force the character to keep moving forward at that speed.
+        if (transform.position.z >= 744f)
+        {
+            if (forcedSpeed <= 0f)
+            {
+                // Capture the current base speed.
+                forcedSpeed = baseSpeed;
+            }
+            
+            // Move forward at the captured forcedSpeed regardless of camera movement.
+            Vector3 forcedMovement = new Vector3(0, 0, forcedSpeed) * Time.deltaTime;
+            transform.Translate(forcedMovement, Space.World);
+            
+            // Clamp the player's x position so they don't exceed the side boundaries.
+            Vector3 clampedPos = transform.position;
+            clampedPos.x = Mathf.Clamp(clampedPos.x, leftBoundary, rightBoundary);
+            transform.position = clampedPos;
+            
+            // Skip processing further inputs.
+            return;
+        }
+        
         float moveSpeed = 0;
 
         // Move forward when pressing "S"
@@ -74,7 +110,6 @@ public class PlayerMovement : MonoBehaviour
         {
             moveSpeed = forwardAdd;
         }
-
         // Slow down when pressing "W"
         if (movementInput.y > 0)
         {
@@ -83,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
 
         timeSinceBoost += Time.deltaTime;
 
-        // Reset boost
+        // Reset boost animation.
         float dashAnimationTime = 0.2f;
         if (timeSinceBoost >= dashAnimationTime)
         {
@@ -102,7 +137,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (trapHitTimer < 2)
                 {
-                    Vector3 move = new Vector3(0, 0, baseSpeed * .7f + moveSpeed * .7f) * Time.deltaTime;
+                    Vector3 move = new Vector3(0, 0, baseSpeed * 0.7f + moveSpeed * 0.7f) * Time.deltaTime;
                     transform.Translate(move);
                 }
                 if (trapHitTimer >= 3f)
@@ -126,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (trapHitTimer < 2)
                 {
-                    Vector3 move = new Vector3(0, 0, baseSpeed * .7f + moveSpeed * .7f) * Time.deltaTime;
+                    Vector3 move = new Vector3(0, 0, baseSpeed * 0.7f + moveSpeed * 0.7f) * Time.deltaTime;
                     transform.Translate(move); 
                 }
                 if (trapHitTimer >= 3f)
@@ -156,15 +191,25 @@ public class PlayerMovement : MonoBehaviour
         }
         
         // Clamp the player's x position so they don't go beyond the side borders.
-        Vector3 clampedPos = transform.position;
-        clampedPos.x = Mathf.Clamp(clampedPos.x, leftBoundary, rightBoundary);
-        transform.position = clampedPos;
+        Vector3 clampedPos2 = transform.position;
+        clampedPos2.x = Mathf.Clamp(clampedPos2.x, leftBoundary, rightBoundary);
+        transform.position = clampedPos2;
+        
+        // Only apply barrier clamping if the player is near the end of the level.
+        if (transform.position.z >= 684f)
+        {
+            // Clamp against both diagonal barriers.
+            ClampToBarrier(barrier1PointA.position, barrier1PointB.position, barrier1Threshold);
+            ClampToBarrier(barrier2PointA.position, barrier2PointB.position, barrier2Threshold);
+        }
     }
 
-    public bool IsDead(){return dead;}
+    public bool IsDead() { return dead; }
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        // Disable input if player control is lost.
+        if (transform.position.z >= 744f) return;
         movementInput = context.ReadValue<Vector2>();
 
         xVal = movementInput.x;
@@ -206,6 +251,7 @@ public class PlayerMovement : MonoBehaviour
     
     public void OnBoost(InputAction.CallbackContext context)
     {
+        if (transform.position.z >= 744f) return;
         if (context.performed && timeSinceBoost >= boostDuration + boostCooldown && !animator.GetBool(isStunnedHash) && !dying)
         {
             isBoosting = true;
@@ -223,7 +269,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isStunnedHash, true);
             trapHitTimer = 0f;  
             invincible = true;
-            if(flashMaterial != null)
+            if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
         }
         else if (collision.gameObject.CompareTag("Spike") && !invincible)
@@ -232,7 +278,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isStunnedHash, true);
             trapHitTimer = 0f;  
             invincible = true;
-            if(flashMaterial != null)
+            if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
         }
         else if (collision.gameObject.CompareTag("Axe") && !invincible)
@@ -241,7 +287,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isStunnedHash, true);
             trapHitTimer = 0f;  
             invincible = true;
-            if(flashMaterial != null)
+            if (flashMaterial != null)
             {
                 StartCoroutine(FlashWhiteWhileStunned());
             }
@@ -252,7 +298,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isStunnedHash, true);
             trapHitTimer = 0f;
             invincible = true;
-            if(flashMaterial != null)
+            if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
         }
         else if (collision.gameObject.CompareTag("Boulder"))
@@ -268,7 +314,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Idol.Instance.idolHolder == collision.transform)
             {
-                // Transfer the idol
+                // Transfer the idol.
                 Idol.Instance.PickUpIdol(transform);
             }
         }
@@ -305,5 +351,28 @@ public class PlayerMovement : MonoBehaviour
     public bool ableToBoost()
     {
         return timeSinceBoost >= boostDuration + boostCooldown;
+    }
+    
+    private void ClampToBarrier(Vector3 pointA, Vector3 pointB, float threshold)
+    {
+        // Calculate the barrier's direction.
+        Vector3 barrierDirection = pointB - pointA;
+        // Compute the barrier normal by crossing the barrier direction with Vector3.up.
+        Vector3 barrierNormal = Vector3.Cross(barrierDirection, Vector3.up).normalized;
+        
+        // Debug: Draw the barrier line and its normal for visualization.
+        Debug.DrawLine(pointA, pointB, Color.green);
+        Debug.DrawRay(pointA, barrierNormal * 5f, Color.red);
+        
+        // Compute the player's signed distance from the barrier.
+        float distance = Vector3.Dot(transform.position - pointA, barrierNormal);
+        
+        // If the distance is less than the threshold, push the player back.
+        if (distance < threshold)
+        {
+            float pushDistance = threshold - distance;
+            transform.position += pushDistance * barrierNormal;
+            Debug.Log("Clamped to barrier: pushing " + pushDistance + " units along " + barrierNormal);
+        }
     }
 }

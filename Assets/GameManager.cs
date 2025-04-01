@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     // References to your player controllers.
-    // These scripts should have an IsDead() method or similar property.
+    // These should be present in the scene but inactive by default.
     public PlayerMovement player1;
     public PlayerMovement player2;
 
@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            // Uncomment if you want the manager to persist across scenes.
+            // Optionally persist across scenes:
             // DontDestroyOnLoad(gameObject);
         }
         else
@@ -29,10 +29,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        // Read join info from PlayerPrefs.
+        int playerOneJoined = PlayerPrefs.GetInt("PlayerOneJoined", 0);
+        int playerTwoJoined = PlayerPrefs.GetInt("PlayerTwoJoined", 0);
+
+        // Activate the players if they joined.
+        if (player1 != null)
+        {
+            player1.gameObject.SetActive(playerOneJoined == 1);
+            Debug.Log("Player 1 active: " + (playerOneJoined == 1));
+        }
+        if (player2 != null)
+        {
+            player2.gameObject.SetActive(playerTwoJoined == 1);
+            Debug.Log("Player 2 active: " + (playerTwoJoined == 1));
+        }
+    }
+
     void Update()
     {
-        // Check if both players are dead and the end hasn't been triggered yet.
-        if (!endTriggered && player1.IsDead() && player2.IsDead())
+        // Determine "dead" state for each player.
+        // Treat an inactive player as dead.
+        bool p1Dead = (player1 == null || !player1.gameObject.activeSelf || player1.IsDead());
+        bool p2Dead = (player2 == null || !player2.gameObject.activeSelf || player2.IsDead());
+
+        // If both players (or the only active player) are dead, trigger the end.
+        if (!endTriggered && p1Dead && p2Dead)
         {
             endTriggered = true;
             StartCoroutine(LoadEndAfterDelay(1f));
@@ -41,13 +65,13 @@ public class GameManager : MonoBehaviour
 
     IEnumerator LoadEndAfterDelay(float delay)
     {
-        // Wait for the specified delay (1 second).
+        // Wait for the specified delay.
         yield return new WaitForSeconds(delay);
 
         // Optionally, set a fallback winner message.
         PlayerPrefs.SetString("WinnerMessage", "No winner! The temple claims its prize!");
-        
-        // Load the end/winner scene.
+
+        // Load the Winner scene.
         SceneManager.LoadScene("WinnerScene");
     }
 }
