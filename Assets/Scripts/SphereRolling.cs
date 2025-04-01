@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement; // Required for scene management
 
 public class SphereRolling : MonoBehaviour
 {
@@ -14,19 +15,15 @@ public class SphereRolling : MonoBehaviour
     {
         if (!isTransitioning)
         {
-            // Calculate how far the sphere will move this frame.
             float movement = CameraFollow.cameraSpeed * Time.deltaTime;
-            
-            // Check if the next movement would reach or exceed the maxZPosition.
+
             if (transform.position.z + movement >= maxZPosition)
             {
-                // Start the smooth transition coroutine.
                 StartCoroutine(MoveToTarget());
                 isTransitioning = true;
             }
             else
             {
-                // Normal movement: move forward and rotate to simulate rolling.
                 transform.Translate(Vector3.forward * movement, Space.World);
                 float rotationAmount = movement * (360f / (2 * Mathf.PI * transform.localScale.x));
                 transform.Rotate(rotationAmount, 0, 0, Space.Self);
@@ -50,8 +47,34 @@ public class SphereRolling : MonoBehaviour
             yield return null;
         }
         
-        // Ensure final values are set.
         transform.position = targetPosition;
         transform.rotation = targetRotation;
+
+        // Load the "Winner" scene after the transition
+        LoadWinnerScene();
     }
+
+    private void LoadWinnerScene()
+{
+    string winnerMessage;
+
+    if (Idol.Instance != null && Idol.Instance.idolHolder != null)
+    {
+        // Get the name of the idol holder
+        string winnerName = Idol.Instance.idolHolder.name;
+        winnerMessage = $"Player {winnerName} Wins!";
+    }
+    else
+    {
+        // Temple of Doom-inspired fallback message
+        winnerMessage = "No winner! The temple claims its prize!";
+    }
+
+    // Store the message in PlayerPrefs for the WinnerScene to display
+    PlayerPrefs.SetString("WinnerMessage", winnerMessage);
+
+    // Load the WinnerScene
+    SceneManager.LoadScene("WinnerScene");
+}
+
 }
