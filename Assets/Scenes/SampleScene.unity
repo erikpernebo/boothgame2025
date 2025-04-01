@@ -23963,6 +23963,11 @@ MonoBehaviour:
   flashMaterial: {fileID: 2100000, guid: a284ff5ad66a74162b207eb3d153e811, type: 2}
   flashInterval: 0.1
   cam: {fileID: 330585546}
+--- !u!4 &849785445 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4973343270356038, guid: 0ef422b7970d3b54794c99032fdd6c17, type: 3}
+  m_PrefabInstance: {fileID: 849785438}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &850221636
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43298,7 +43303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1603122309
 Transform:
   m_ObjectHideFlags: 0
@@ -43328,6 +43333,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portName: COM3
   baudRate: 115200
+  player1: {fileID: 1546225776799073}
+  player2: {fileID: 849785445}
+  player3: {fileID: 0}
+  player4: {fileID: 0}
 --- !u!1001 &1604770735
 PrefabInstance:
   m_ObjectHideFlags: 0
