@@ -1,29 +1,57 @@
 using UnityEngine;
+using System.Collections;
 
 public class SphereRolling : MonoBehaviour
 {
-    public float stopZ = 100f; // The z position at which the boulder should stop
+    public float maxZPosition = 715f;                     // The z threshold to trigger the transition.
+    public Vector3 targetPosition = new Vector3(0f, 34.2f, 715f);  // Final target position.
+    public Vector3 targetRotationEuler = new Vector3(-164.986f, 0f, 0f); // Final target rotation in Euler angles.
+    public float transitionDuration = 1f;                 // Duration of the transition.
 
+    private bool isTransitioning = false; // Flag to ensure the transition only happens once.
+    
     void Update()
     {
-        // Only move the boulder if it hasn't reached the stop position yet.
-        if (transform.position.z < stopZ)
+        if (!isTransitioning)
         {
-            // Calculate the movement distance for this frame.
-            float moveDistance = CameraFollow.cameraSpeed * Time.deltaTime;
-
-            // If this move would overshoot stopZ, adjust the distance.
-            if (transform.position.z + moveDistance > stopZ)
+            // Calculate how far the sphere will move this frame.
+            float movement = CameraFollow.cameraSpeed * Time.deltaTime;
+            
+            // Check if the next movement would reach or exceed the maxZPosition.
+            if (transform.position.z + movement >= maxZPosition)
             {
-                moveDistance = stopZ - transform.position.z;
+                // Start the smooth transition coroutine.
+                StartCoroutine(MoveToTarget());
+                isTransitioning = true;
             }
-
-            // Move the sphere forward using the adjusted distance.
-            transform.Translate(Vector3.forward * moveDistance, Space.World);
-
-            // Calculate and apply the rotation based on the actual move distance.
-            float rotationAmount = moveDistance * (360f / (2 * Mathf.PI * transform.localScale.x));
-            transform.Rotate(rotationAmount, 0, 0, Space.Self);
+            else
+            {
+                // Normal movement: move forward and rotate to simulate rolling.
+                transform.Translate(Vector3.forward * movement, Space.World);
+                float rotationAmount = movement * (360f / (2 * Mathf.PI * transform.localScale.x));
+                transform.Rotate(rotationAmount, 0, 0, Space.Self);
+            }
         }
+    }
+    
+    private IEnumerator MoveToTarget()
+    {
+        Vector3 startPosition = transform.position;
+        Quaternion startRotation = transform.rotation;
+        Quaternion targetRotation = Quaternion.Euler(targetRotationEuler);
+        float elapsedTime = 0f;
+        
+        while (elapsedTime < transitionDuration)
+        {
+            float t = elapsedTime / transitionDuration;
+            transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        
+        // Ensure final values are set.
+        transform.position = targetPosition;
+        transform.rotation = targetRotation;
     }
 }
