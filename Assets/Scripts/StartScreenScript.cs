@@ -11,8 +11,8 @@ public class StartScreenManager : MonoBehaviour
     public Button startButton;                     // Start Game button
 
     [Header("Player GameObjects")]
-    public GameObject playerOneGameObject;         // Pre-placed Player 1 3D object (should be unchecked by default)
-    public GameObject playerTwoGameObject;         // Pre-placed Player 2 3D object (should be unchecked by default)
+    public GameObject playerOneGameObject;         // Pre-placed Player 1 3D object (unchecked by default)
+    public GameObject playerTwoGameObject;         // Pre-placed Player 2 3D object (unchecked by default)
 
     [Header("Player Labels")]
     public TextMeshProUGUI playerOneLabel;         // Label that says "Player One"
@@ -34,6 +34,10 @@ public class StartScreenManager : MonoBehaviour
 
         // Disable start button until at least one player has joined.
         startButton.interactable = false;
+        startButton.onClick.RemoveAllListeners();
+        startButton.onClick.AddListener(OnStartButtonClicked);
+
+        Debug.Log("StartScreenManager active.");
     }
 
     void Update()
@@ -48,6 +52,12 @@ public class StartScreenManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
             TogglePlayerTwoJoin();
+        }
+
+        // If the button is active and Enter is pressed, start the game.
+        if (startButton.interactable && Input.GetKeyDown(KeyCode.Return))
+        {
+            OnStartButtonClicked();
         }
     }
 
@@ -82,12 +92,21 @@ public class StartScreenManager : MonoBehaviour
     // Enable the start button if at least one player has joined.
     void UpdateStartButton()
     {
-        startButton.interactable = playerOneJoined || playerTwoJoined;
+        bool canStart = playerOneJoined || playerTwoJoined;
+        startButton.interactable = canStart;
+
+        // Optional: You can change the visual state of the button here manually if needed.
+        // For example, adjust its color based on 'canStart'.
+        ColorBlock cb = startButton.colors;
+        cb.normalColor = canStart ? Color.white : Color.gray;
+        startButton.colors = cb;
     }
 
-    // This method is called when the Start button is clicked.
+    // This method is called when the Start button is clicked or Enter is pressed.
     public void OnStartButtonClicked()
     {
+        Debug.Log("Start button clicked, loading GameScene");
+
         // Store the join info (using PlayerPrefs) so the game scene knows which players to load.
         PlayerPrefs.SetInt("PlayerOneJoined", playerOneJoined ? 1 : 0);
         PlayerPrefs.SetInt("PlayerTwoJoined", playerTwoJoined ? 1 : 0);
