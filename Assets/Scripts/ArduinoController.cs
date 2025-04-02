@@ -21,7 +21,14 @@ public class ArduinoController : MonoBehaviour
     [SerializeField] Transform player2 = null;
     [SerializeField] Transform player3 = null;
     [SerializeField] Transform player4 = null;
+    [SerializeField] bool isMenu;
     private Transform[] players = new Transform[4];
+    private Key[] keyMap = { 
+        Key.Space, Key.S, Key.W, Key.A, Key.D,
+        Key.RightShift, Key.DownArrow, Key.UpArrow, Key.LeftArrow, Key.RightArrow,
+        Key.Z, Key.U, Key.I, Key.O, Key.P,
+        Key.X, Key.H, Key.J, Key.K, Key.L
+    };
 
     void Start()
     {
@@ -95,51 +102,15 @@ public class ArduinoController : MonoBehaviour
             return;
         }
         Debug.Log(data);
+        List<Key> pressedKeys = new List<Key>();
         for (int i = 0; i < stringArray.Length; i++) {
-            List<Key> pressedKeys = new List<Key>();
-            if (stringArray[0] == "1")
+            if (stringArray[i] == "1")
             {
-                pressedKeys.Add(Key.Space);
+                pressedKeys.Add(keyMap[i]);
             }
-            if (stringArray[1] == "1")
-            {
-                pressedKeys.Add(Key.S);
-            }
-            if(stringArray[2] == "1")
-            {
-                pressedKeys.Add(Key.W);
-            }
-            if(stringArray[3] == "1")
-            {
-                pressedKeys.Add(Key.A);
-            }
-            if(stringArray[4] == "1")
-            {
-                pressedKeys.Add(Key.D);
-            }
-            if (stringArray[5] == "1")
-            {
-                pressedKeys.Add(Key.RightShift);
-            }
-            if (stringArray[6] == "1")
-            {
-                pressedKeys.Add(Key.DownArrow);
-            }
-            if (stringArray[7] == "1")
-            {
-                pressedKeys.Add(Key.UpArrow);
-            }
-            if (stringArray[8] == "1")
-            {
-                pressedKeys.Add(Key.LeftArrow);
-            }
-            if (stringArray[9] == "1")
-            {
-                pressedKeys.Add(Key.RightArrow);
-            }
-            KeyboardState keyboardState = new KeyboardState(pressedKeys.ToArray());
-            InputSystem.QueueStateEvent(keyboard, keyboardState);
         }
+        KeyboardState keyboardState = new KeyboardState(pressedKeys.ToArray());
+        InputSystem.QueueStateEvent(keyboard, keyboardState);
 
         string result = $"{GetDashStatus(1)},{GetDashStatus(2)},{GetDashStatus(3)},{GetDashStatus(4)}";
         WriteSerialData(result);
@@ -165,6 +136,10 @@ public class ArduinoController : MonoBehaviour
         int index = playerNo - 1;
         if (players[index] == null) {
             return 0;
+        }
+        if (isMenu)
+        {
+            return 1;
         }
         if (players[index].GetComponent<PlayerMovement>().ableToBoost())
         {

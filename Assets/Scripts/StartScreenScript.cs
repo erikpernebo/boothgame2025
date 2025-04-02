@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.LowLevel;
 using TMPro;
 
 public class StartScreenManager : MonoBehaviour
@@ -27,6 +30,7 @@ public class StartScreenManager : MonoBehaviour
     private bool playerTwoJoined = false;
     private bool playerThreeJoined = false;
     private bool playerFourJoined = false;
+    private Keyboard keyboard;
 
     void Start()
     {
@@ -47,6 +51,8 @@ public class StartScreenManager : MonoBehaviour
         startButton.onClick.RemoveAllListeners();
         startButton.onClick.AddListener(OnStartButtonClicked);
 
+        keyboard = InputSystem.GetDevice<Keyboard>();
+
         Debug.Log("StartScreenManager active.");
     }
 
@@ -54,22 +60,22 @@ public class StartScreenManager : MonoBehaviour
     {
         // Toggle join status:
         // Player One: Space key.
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (keyboard.spaceKey.wasPressedThisFrame)
         {
             TogglePlayerOneJoin();
         }
         // Player Two: Right Shift key.
-        if (Input.GetKeyDown(KeyCode.RightShift))
+        if (keyboard.rightShiftKey.wasPressedThisFrame)
         {
             TogglePlayerTwoJoin();
         }
         // Player Three: Z key.
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (keyboard.zKey.wasPressedThisFrame)
         {
             TogglePlayerThreeJoin();
         }
         // Player Four: X key.
-        if (Input.GetKeyDown(KeyCode.X))
+        if (keyboard.xKey.wasPressedThisFrame)
         {
             TogglePlayerFourJoin();
         }
