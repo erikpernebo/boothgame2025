@@ -482,7 +482,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   winnerText: {fileID: 1031702522}
-  inputDelay: 5
+  inputDelay: 3
 --- !u!4 &457839344
 Transform:
   m_ObjectHideFlags: 0

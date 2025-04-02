@@ -13,24 +13,34 @@ public class StartScreenManager : MonoBehaviour
     [Header("Player GameObjects")]
     public GameObject playerOneGameObject;         // Pre-placed Player 1 3D object (unchecked by default)
     public GameObject playerTwoGameObject;         // Pre-placed Player 2 3D object (unchecked by default)
+    public GameObject playerThreeGameObject;       // Pre-placed Player 3 3D object (unchecked by default)
+    public GameObject playerFourGameObject;        // Pre-placed Player 4 3D object (unchecked by default)
 
     [Header("Player Labels")]
     public TextMeshProUGUI playerOneLabel;         // Label that says "Player One"
     public TextMeshProUGUI playerTwoLabel;         // Label that says "Player Two"
+    public TextMeshProUGUI playerThreeLabel;       // Label that says "Player Three"
+    public TextMeshProUGUI playerFourLabel;        // Label that says "Player Four"
 
-    // Track join status
+    // Track join status for 4 players.
     private bool playerOneJoined = false;
     private bool playerTwoJoined = false;
+    private bool playerThreeJoined = false;
+    private bool playerFourJoined = false;
 
     void Start()
     {
-        // Ensure both player game objects are disabled at start.
+        // Ensure all player game objects are disabled at start.
         if (playerOneGameObject) playerOneGameObject.SetActive(false);
         if (playerTwoGameObject) playerTwoGameObject.SetActive(false);
+        if (playerThreeGameObject) playerThreeGameObject.SetActive(false);
+        if (playerFourGameObject) playerFourGameObject.SetActive(false);
 
-        // Hide the join labels initially.
+        // Hide all join labels initially.
         if (playerOneLabel) playerOneLabel.gameObject.SetActive(false);
         if (playerTwoLabel) playerTwoLabel.gameObject.SetActive(false);
+        if (playerThreeLabel) playerThreeLabel.gameObject.SetActive(false);
+        if (playerFourLabel) playerFourLabel.gameObject.SetActive(false);
 
         // Disable start button until at least one player has joined.
         startButton.interactable = false;
@@ -42,16 +52,26 @@ public class StartScreenManager : MonoBehaviour
 
     void Update()
     {
-        // Toggle Player One join with the Space key.
+        // Toggle join status:
+        // Player One: Space key.
         if (Input.GetKeyDown(KeyCode.Space))
         {
             TogglePlayerOneJoin();
         }
-
-        // Toggle Player Two join with the Right Shift key.
+        // Player Two: Right Shift key.
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
             TogglePlayerTwoJoin();
+        }
+        // Player Three: Z key.
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            TogglePlayerThreeJoin();
+        }
+        // Player Four: X key.
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            TogglePlayerFourJoin();
         }
 
         // If the button is active and Enter is pressed, start the game.
@@ -89,14 +109,41 @@ public class StartScreenManager : MonoBehaviour
         UpdateStartButton();
     }
 
+    void TogglePlayerThreeJoin()
+    {
+        playerThreeJoined = !playerThreeJoined;
+        if (playerThreeGameObject != null)
+        {
+            playerThreeGameObject.SetActive(playerThreeJoined);
+        }
+        if (playerThreeLabel != null)
+        {
+            playerThreeLabel.gameObject.SetActive(playerThreeJoined);
+        }
+        UpdateStartButton();
+    }
+
+    void TogglePlayerFourJoin()
+    {
+        playerFourJoined = !playerFourJoined;
+        if (playerFourGameObject != null)
+        {
+            playerFourGameObject.SetActive(playerFourJoined);
+        }
+        if (playerFourLabel != null)
+        {
+            playerFourLabel.gameObject.SetActive(playerFourJoined);
+        }
+        UpdateStartButton();
+    }
+
     // Enable the start button if at least one player has joined.
     void UpdateStartButton()
     {
-        bool canStart = playerOneJoined || playerTwoJoined;
+        bool canStart = playerOneJoined || playerTwoJoined || playerThreeJoined || playerFourJoined;
         startButton.interactable = canStart;
 
-        // Optional: You can change the visual state of the button here manually if needed.
-        // For example, adjust its color based on 'canStart'.
+        // Optional: Adjust the visual state (color) of the button based on join status.
         ColorBlock cb = startButton.colors;
         cb.normalColor = canStart ? Color.white : Color.gray;
         startButton.colors = cb;
@@ -107,11 +154,13 @@ public class StartScreenManager : MonoBehaviour
     {
         Debug.Log("Start button clicked, loading GameScene");
 
-        // Store the join info (using PlayerPrefs) so the game scene knows which players to load.
+        // Store join info (using PlayerPrefs) so the game scene knows which players to load.
         PlayerPrefs.SetInt("PlayerOneJoined", playerOneJoined ? 1 : 0);
         PlayerPrefs.SetInt("PlayerTwoJoined", playerTwoJoined ? 1 : 0);
+        PlayerPrefs.SetInt("PlayerThreeJoined", playerThreeJoined ? 1 : 0);
+        PlayerPrefs.SetInt("PlayerFourJoined", playerFourJoined ? 1 : 0);
 
-        // Load the game scene (ensure your scene name matches)
+        // Load the game scene (ensure the scene name matches exactly in Build Settings).
         SceneManager.LoadScene("GameScene");
     }
 }

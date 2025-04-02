@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     Animator animator;
     [SerializeField] public float sideSpeed = 3f;
     [SerializeField] private float forwardAdd = 10f; // Extra speed when boosting
-    [SerializeField] private float slowAdd = 15f; // Speed reduction when slowing
+    [SerializeField] private float slowAdd = 15f;      // Speed reduction when slowing
     [SerializeField] private float boostDuration = 1f;
     [SerializeField] private float boostCooldown = 1f;
     [SerializeField] private float boostMultiplier = 2f;
@@ -25,6 +25,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform barrier2PointB; // Second barrier, second point
     [SerializeField] private float barrier2Threshold = 0f; // Allowed distance for barrier 2
 
+    // New field for the forced sprint speed when control is lost.
+    [SerializeField] private float forcedSprintSpeed = 15f;
+    
     private bool isBoosting = false;
     private float timeSinceBoost;
 
@@ -80,16 +83,18 @@ public class PlayerMovement : MonoBehaviour
     
     void Update()
     {
-        // If the player reaches or passes z = 744, capture the current speed (if not already captured)
-        // and force the character to keep moving forward at that speed.
+        // Once control is lost, force the character to sprint forward.
         if (transform.position.z >= 744f)
         {
+            // If forcedSpeed hasn't been captured yet, capture it from forcedSprintSpeed.
             if (forcedSpeed <= 0f)
             {
-                // Capture the current base speed.
-                forcedSpeed = baseSpeed;
+                forcedSpeed = forcedSprintSpeed;
             }
             
+            // Force the sprint animation.
+            animator.SetBool(isSprintingHash, true);
+
             // Move forward at the captured forcedSpeed regardless of camera movement.
             Vector3 forcedMovement = new Vector3(0, 0, forcedSpeed) * Time.deltaTime;
             transform.Translate(forcedMovement, Space.World);
@@ -208,7 +213,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        // Disable input if player control is lost.
+        // Disable input if control is lost.
         if (transform.position.z >= 744f) return;
         movementInput = context.ReadValue<Vector2>();
 
