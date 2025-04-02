@@ -24131,6 +24131,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 870beced-c483-4aa9-aa54-bfcfbefe2386
     m_ActionName: 'Player 2/Dash[/Keyboard/rightShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 554b5b54-f19f-4f95-97e8-e3eef46f44af
+    m_ActionName: 'Player 3/Move[/Keyboard/i,/Keyboard/u,/Keyboard/o,/Keyboard/p]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c2b6efb0-e0c2-4953-840f-9fd5aad5d6a8
+    m_ActionName: 'Player 3/Dash[/Keyboard/z]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: dfcb765a-7c58-4b48-b857-317dbcb34cc3
+    m_ActionName: 'Player 4/Move[/Keyboard/j,/Keyboard/h,/Keyboard/k,/Keyboard/l]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fa23012a-c77b-4faf-8314-562da58feef4
+    m_ActionName: 'Player 4/Dash[/Keyboard/x]'
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player 2
@@ -44192,6 +44208,7 @@ MonoBehaviour:
   player2: {fileID: 849785445}
   player3: {fileID: 0}
   player4: {fileID: 0}
+  isMenu: 0
 --- !u!1001 &1604770735
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49281,8 +49298,16 @@ MonoBehaviour:
     m_ActionId: 9e20555b-72d1-4f8d-9476-bbafb0b74025
     m_ActionName: Player/Dash
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 93ff204e-15fd-424f-ad3b-f577fe1cf3ab
+    m_ActionName: 'Player 2/Move[/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 870beced-c483-4aa9-aa54-bfcfbefe2386
+    m_ActionName: 'Player 2/Dash[/Keyboard/rightShift]'
+  - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 849785443}
+      - m_Target: {fileID: 1807879104}
         m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
@@ -49294,11 +49319,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 93ff204e-15fd-424f-ad3b-f577fe1cf3ab
-    m_ActionName: 'Player 2/Move[/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]'
+    m_ActionId: 554b5b54-f19f-4f95-97e8-e3eef46f44af
+    m_ActionName: 'Player 3/Move[/Keyboard/i,/Keyboard/u,/Keyboard/o,/Keyboard/p]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 849785443}
+      - m_Target: {fileID: 1807879104}
         m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
         m_MethodName: OnBoost
         m_Mode: 0
@@ -49310,11 +49335,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 870beced-c483-4aa9-aa54-bfcfbefe2386
-    m_ActionName: 'Player 2/Dash[/Keyboard/rightShift]'
+    m_ActionId: c2b6efb0-e0c2-4953-840f-9fd5aad5d6a8
+    m_ActionName: 'Player 3/Dash[/Keyboard/z]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: dfcb765a-7c58-4b48-b857-317dbcb34cc3
+    m_ActionName: 'Player 4/Move[/Keyboard/j,/Keyboard/h,/Keyboard/k,/Keyboard/l]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fa23012a-c77b-4faf-8314-562da58feef4
+    m_ActionName: 'Player 4/Dash[/Keyboard/x]'
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player 1
+  m_DefaultActionMap: Player 3
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &1807879104
@@ -55360,8 +55393,24 @@ MonoBehaviour:
     m_ActionId: 9e20555b-72d1-4f8d-9476-bbafb0b74025
     m_ActionName: Player/Dash
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 93ff204e-15fd-424f-ad3b-f577fe1cf3ab
+    m_ActionName: 'Player 2/Move[/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 870beced-c483-4aa9-aa54-bfcfbefe2386
+    m_ActionName: 'Player 2/Dash[/Keyboard/rightShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 554b5b54-f19f-4f95-97e8-e3eef46f44af
+    m_ActionName: 'Player 3/Move[/Keyboard/i,/Keyboard/u,/Keyboard/o,/Keyboard/p]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c2b6efb0-e0c2-4953-840f-9fd5aad5d6a8
+    m_ActionName: 'Player 3/Dash[/Keyboard/z]'
+  - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 849785443}
+      - m_Target: {fileID: 2046890319}
         m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
@@ -55373,11 +55422,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 93ff204e-15fd-424f-ad3b-f577fe1cf3ab
-    m_ActionName: 'Player 2/Move[/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]'
+    m_ActionId: dfcb765a-7c58-4b48-b857-317dbcb34cc3
+    m_ActionName: 'Player 4/Move[/Keyboard/j,/Keyboard/h,/Keyboard/k,/Keyboard/l]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 849785443}
+      - m_Target: {fileID: 2046890319}
         m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
         m_MethodName: OnBoost
         m_Mode: 0
@@ -55389,11 +55438,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 870beced-c483-4aa9-aa54-bfcfbefe2386
-    m_ActionName: 'Player 2/Dash[/Keyboard/rightShift]'
+    m_ActionId: fa23012a-c77b-4faf-8314-562da58feef4
+    m_ActionName: 'Player 4/Dash[/Keyboard/x]'
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player 2
+  m_DefaultActionMap: Player 4
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &2046890319
