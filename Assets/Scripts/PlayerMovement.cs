@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public float sideSpeed = 3f;
     [SerializeField] private float forwardAdd = 10f; // Extra speed when boosting
     [SerializeField] private float slowAdd = 15f;      // Speed reduction when slowing
+    private float lobbySpeed = 15f;
     [SerializeField] private float boostDuration = 1f;
     [SerializeField] private float boostCooldown = 1f;
     [SerializeField] private float boostMultiplier = 2f;
@@ -56,7 +57,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Material flashMaterial; // Assign a white material in the inspector
     [SerializeField] private float flashInterval = 0.1f;
     private float cameraOffsetMax = -15f;
+    private float cameraOffsetMin = -70f;
     [SerializeField] private Transform cam;
+    CameraFollow camScript;
 
     void Start()
     {
@@ -64,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
         timeSinceBoost = boostDuration + boostCooldown;
 
         animator = GetComponent<Animator>();
+        camScript = cam.GetComponent<CameraFollow>();
 
         characterRenderers = GetComponentsInChildren<Renderer>();
         originalMaterials = new Material[characterRenderers.Length];
@@ -114,11 +118,19 @@ public class PlayerMovement : MonoBehaviour
         if (movementInput.y < 0)
         {
             moveSpeed = forwardAdd;
+            if (!camScript.gameState())
+            {
+                moveSpeed = lobbySpeed;
+            }
         }
         // Slow down when pressing "W"
         if (movementInput.y > 0)
         {
             moveSpeed = -slowAdd;
+            if (!camScript.gameState())
+            {
+                moveSpeed = -lobbySpeed;
+            }
         }
 
         timeSinceBoost += Time.deltaTime;
@@ -179,7 +191,15 @@ public class PlayerMovement : MonoBehaviour
         if (!stunned && !dying)
         {
             float boostFactor = isBoosting ? boostMultiplier : 1;
-            Vector3 move = new Vector3(-boostFactor * (movementInput.x * sideSpeed), 0, baseSpeed + boostFactor * moveSpeed) * Time.deltaTime;
+            Vector3 move;
+            if (camScript.gameState())
+            {
+                move = new Vector3(-boostFactor * (movementInput.x * sideSpeed), 0, baseSpeed + boostFactor * moveSpeed) * Time.deltaTime;
+            }
+            else
+            {
+                move = new Vector3(-boostFactor * (movementInput.x * sideSpeed), 0, boostFactor * moveSpeed) * Time.deltaTime;
+            }
             transform.Translate(move);
 
             float camZ = cam.transform.position.z;
@@ -188,11 +208,24 @@ public class PlayerMovement : MonoBehaviour
                 Vector3 adjust = new Vector3(0, 0, -(transform.position.z - (camZ + cameraOffsetMax)));
                 transform.Translate(adjust);    
             }
+
+            if (!camScript.gameState() && transform.position.z < camZ + cameraOffsetMin)
+            {
+                Vector3 adjust = new Vector3(0, 0, -(transform.position.z - (camZ + cameraOffsetMin)));
+                transform.Translate(adjust);
+            }
         }
 
         if (!dying)
         {
-            handleMovement();
+            if (camScript.gameState())
+            {
+                handleMovement();
+            }
+            else
+            {
+                handleLobbyMovement();
+            }
         }
         
         // Clamp the player's x position so they don't go beyond the side borders.
@@ -253,7 +286,32 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isLeftStrafeHash, true);
         }
     }
-    
+
+    void handleLobbyMovement()
+    {
+        animator.SetBool(isSprintingHash, false);
+        animator.SetBool(isSlowJoggingHash, false);
+        animator.SetBool(isRightHash, false);
+        animator.SetBool(isLeftStrafeHash, false);
+
+        if (xVal == 0 && yVal == -1)
+        {
+            animator.SetBool(isSprintingHash, true);
+        }
+        else if (xVal == 0 && yVal == 1)
+        {
+            animator.SetBool(isSlowJoggingHash, true);
+        }
+        else if (((xVal == -1 && yVal != 1) || (xVal < -0.70f && xVal > -0.71f && yVal < -0.70f && yVal > -0.71f)))
+        {
+            animator.SetBool(isRightHash, true);
+        }
+        else if (((xVal == 1 && yVal != 1) || (xVal < 0.71f && xVal > 0.70f && yVal < -0.70f && yVal > -0.71f)))
+        {
+            animator.SetBool(isLeftStrafeHash, true);
+        }
+    }
+
     public void OnBoost(InputAction.CallbackContext context)
     {
         if (transform.position.z >= 744f) return;
@@ -306,7 +364,7 @@ public class PlayerMovement : MonoBehaviour
             if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
         }
-        else if (collision.gameObject.CompareTag("Boulder"))
+        else if (collision.gameObject.CompareTag("Boulder") && camScript.gameState())
         {
             Debug.Log("Crushed By Boulder");
             dying = true;

@@ -9354,6 +9354,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxZPosition: 800
+  gameStarted: 0
+  cam: {fileID: 0}
 --- !u!1 &330753866
 GameObject:
   m_ObjectHideFlags: 0
@@ -24500,6 +24502,7 @@ MonoBehaviour:
   player2: {fileID: 849785443}
   player3: {fileID: 1807879104}
   player4: {fileID: 2046890319}
+  cam: {fileID: 330585546}
 --- !u!4 &860539105
 Transform:
   m_ObjectHideFlags: 0
@@ -44204,10 +44207,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portName: COM3
   baudRate: 115200
-  player1: {fileID: 0}
+  player1: {fileID: 1546225776799076}
   player2: {fileID: 849785445}
-  player3: {fileID: 0}
-  player4: {fileID: 0}
+  player3: {fileID: 1807879106}
+  player4: {fileID: 2046890321}
   isMenu: 0
 --- !u!1001 &1604770735
 PrefabInstance:
@@ -44720,6 +44723,7 @@ MonoBehaviour:
   targetPosition: {x: 0, y: 15, z: 712}
   targetRotationEuler: {x: -164.986, y: 0, z: 0}
   transitionDuration: 1
+  cam: {fileID: 330585546}
 --- !u!65 &1640928846
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -49381,6 +49385,11 @@ MonoBehaviour:
   flashMaterial: {fileID: 2100000, guid: a284ff5ad66a74162b207eb3d153e811, type: 2}
   flashInterval: 0.1
   cam: {fileID: 330585546}
+--- !u!4 &1807879106 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4992728149789526, guid: 4e4ca048bf6184a4896cec8256faa038, type: 3}
+  m_PrefabInstance: {fileID: 1807879098}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1810400969
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55476,6 +55485,11 @@ MonoBehaviour:
   flashMaterial: {fileID: 2100000, guid: a284ff5ad66a74162b207eb3d153e811, type: 2}
   flashInterval: 0.1
   cam: {fileID: 330585546}
+--- !u!4 &2046890321 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4659995309720128, guid: 003da1c948a32d44887358162dfec7d1, type: 3}
+  m_PrefabInstance: {fileID: 2046890313}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2047780679 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 621923570699444347, guid: 0e66b11de781e4348af3a94a1945c400, type: 3}
@@ -57979,6 +57993,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266fa710517c14f4ab00ed2d2c006b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1546225776799076 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6988298653779450027, guid: f2f1582ee952441c4a1efa18097b3c2c, type: 3}
+  m_PrefabInstance: {fileID: 2461544767335349337}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2461544767335349337
 PrefabInstance:
   m_ObjectHideFlags: 0
