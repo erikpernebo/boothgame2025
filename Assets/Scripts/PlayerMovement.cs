@@ -26,6 +26,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform barrier2PointB; // Second barrier, second point
     [SerializeField] private float barrier2Threshold = 0f; // Allowed distance for barrier 2
 
+    [SerializeField] private RuntimeAnimatorController alternateAnimatorController;
+
+
     // New field for the forced sprint speed when control is lost.
     [SerializeField] private float forcedSprintSpeed = 15f;
     
@@ -39,6 +42,11 @@ public class PlayerMovement : MonoBehaviour
     int isBoostHash;
     int isStunnedHash;
     int isDyingHash;
+    int isLeftWalkingHash;
+    int isLeftBackHash;
+    int isRightWalkingHash;
+    int isRightBackHash;
+
     private Vector2 movementInput;
     // baseSpeed is initially set from CameraFollow.
     private float baseSpeed = CameraFollow.cameraSpeed;
@@ -51,6 +59,8 @@ public class PlayerMovement : MonoBehaviour
     public bool invincible = false;
     private bool dying = false;
     private bool dead = false;
+
+    private bool swappedAnimator = false;
     
     private Renderer[] characterRenderers;
     private Material[] originalMaterials;
@@ -83,6 +93,11 @@ public class PlayerMovement : MonoBehaviour
         isBoostHash = Animator.StringToHash("isDash");
         isStunnedHash = Animator.StringToHash("isStunned");
         isDyingHash = Animator.StringToHash("isDying");
+        isLeftWalkingHash = Animator.StringToHash("isLeftWalking");
+        isLeftBackHash = Animator.StringToHash("isLeftBack");
+        isRightWalkingHash = Animator.StringToHash("isRightWalking");
+        isRightBackHash = Animator.StringToHash("isRightBack");
+
     }
     
     void Update()
@@ -219,7 +234,11 @@ public class PlayerMovement : MonoBehaviour
         if (!dying)
         {
             if (camScript.gameState())
-            {
+            {   
+                if (!swappedAnimator){
+                    animator.runtimeAnimatorController = alternateAnimatorController;
+                    swappedAnimator = true;
+                }
                 handleMovement();
             }
             else
@@ -289,11 +308,17 @@ public class PlayerMovement : MonoBehaviour
 
     void handleLobbyMovement()
     {
+        // Reset all animator booleans
         animator.SetBool(isSprintingHash, false);
         animator.SetBool(isSlowJoggingHash, false);
         animator.SetBool(isRightHash, false);
         animator.SetBool(isLeftStrafeHash, false);
+        animator.SetBool(isLeftWalkingHash, false);
+        animator.SetBool(isLeftBackHash, false);
+        animator.SetBool(isRightWalkingHash, false);
+        animator.SetBool(isRightBackHash, false);
 
+        // Forward and backward logic (already present)
         if (xVal == 0 && yVal == -1)
         {
             animator.SetBool(isSprintingHash, true);
@@ -302,11 +327,31 @@ public class PlayerMovement : MonoBehaviour
         {
             animator.SetBool(isSlowJoggingHash, true);
         }
-        else if (((xVal == -1 && yVal != 1) || (xVal < -0.70f && xVal > -0.71f && yVal < -0.70f && yVal > -0.71f)))
+
+        // Left / Right Forward movement
+        else if (xVal == 1 && yVal != 1) 
+        {
+            animator.SetBool(isLeftWalkingHash, true);
+        }
+        else if (xVal == -1 && yVal != 1)
+        {
+            animator.SetBool(isRightWalkingHash, true);
+        }
+
+        // Left / Right Backward movement
+        else if (xVal < -0.70f && xVal > -0.71f && yVal > 0.70f && yVal < 0.71f)
+        {
+            animator.SetBool(isLeftBackHash, true);
+        }
+        else if (xVal > 0.70f && xVal < 0.71f && yVal > 0.70f && yVal < 0.71f)
+        {
+            animator.SetBool(isRightBackHash, true);
+        }
+        else if ((xVal < -0.70f && xVal > -0.71f && yVal < -0.70f && yVal > -0.71f))
         {
             animator.SetBool(isRightHash, true);
         }
-        else if (((xVal == 1 && yVal != 1) || (xVal < 0.71f && xVal > 0.70f && yVal < -0.70f && yVal > -0.71f)))
+        else if ((xVal < 0.71f && xVal > 0.70f && yVal < -0.70f && yVal > -0.71f))
         {
             animator.SetBool(isLeftStrafeHash, true);
         }
