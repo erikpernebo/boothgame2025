@@ -14,7 +14,7 @@ public class Idol : MonoBehaviour
     public Transform idolHolder = null;  // The current player holding the idol
     public GameObject myUIElement; // Assign this in the Inspector
 
-    private Transform playerInContact = null;  // Reference to player currently in contact
+    private int playersInContact = 0;
     private float contactTimer = 0f;  // Timer to track contact duration
     public Transform cam;
     CameraFollow script;
@@ -74,7 +74,7 @@ public class Idol : MonoBehaviour
         }
 
         // If player is in contact with the idol, increment the timer
-        if (!script.gameState() && playerInContact != null)
+        if (!script.gameState() && playersInContact > 0)
         {
             contactTimer += Time.deltaTime;
 
@@ -119,27 +119,21 @@ public class Idol : MonoBehaviour
         // Track when player enters trigger
         if (other.CompareTag("Player"))
         {
-            playerInContact = other.transform;
-            contactTimer = 0f;  // Reset timer when contact begins
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        // Ensure we're tracking the correct player if multiple players exist
-        if (other.CompareTag("Player") && playerInContact == null)
-        {
-            playerInContact = other.transform;
+            playersInContact += 1;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         // Reset contact tracking when player exits trigger
-        if (other.CompareTag("Player") && other.transform == playerInContact)
+        if (other.CompareTag("Player"))
         {
-            playerInContact = null;
-            contactTimer = 0f;  // Reset timer when contact is broken
+            playersInContact -= 1;
+            if (playersInContact <= 0)
+            {
+                contactTimer = 0f;
+                playersInContact = 0;
+            }
         }
     }
 
