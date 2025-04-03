@@ -115,7 +115,7 @@ public class SphereRolling : MonoBehaviour
             // Get the name of the idol holder
             shomAI.GetComponent<ShomAI>().DeactivateShomikMode();
             string winnerName = vape.GetComponent<Idol>().idolHolder.name;
-            winnerMessage = $"Player {winnerName} is the Ginder King!";
+            winnerMessage = $"Player {winnerName} is the Shom King!";
         }
         else
         {
