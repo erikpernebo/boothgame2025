@@ -6904,7 +6904,7 @@ MonoBehaviour:
   - {fileID: 56387405}
   - {fileID: 43004823}
   - {fileID: 1789581741}
-  riseDistance: 30
+  riseDistance: 60
   riseDuration: 0.01
   flameLifetime: 2
 --- !u!114 &230789525
@@ -12202,7 +12202,7 @@ MonoBehaviour:
   - {fileID: 1019076893}
   - {fileID: 826675155}
   - {fileID: 1125029074}
-  riseDistance: 30
+  riseDistance: 60
   riseDuration: 0.01
   flameLifetime: 2
 --- !u!1001 &442744137
@@ -43529,7 +43529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74505ce2ac4b345258a90d05316eac22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredTime: 0.8
+  requiredTime: 0.4
   flameSpawner: {fileID: 439662478}
 --- !u!65 &1567211294
 BoxCollider:
@@ -44213,7 +44213,6 @@ MonoBehaviour:
   player2: {fileID: 849785445}
   player3: {fileID: 1807879106}
   player4: {fileID: 2046890321}
-  isMenu: 0
 --- !u!1001 &1604770735
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51375,7 +51374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74505ce2ac4b345258a90d05316eac22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredTime: 0.8
+  requiredTime: 0.4
   flameSpawner: {fileID: 230789524}
 --- !u!65 &1889071990
 BoxCollider:

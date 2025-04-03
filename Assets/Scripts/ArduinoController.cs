@@ -21,7 +21,6 @@ public class ArduinoController : MonoBehaviour
     [SerializeField] Transform player2 = null;
     [SerializeField] Transform player3 = null;
     [SerializeField] Transform player4 = null;
-    [SerializeField] bool isMenu;
     private Transform[] players = new Transform[4];
     private Key[] keyMap = { 
         Key.Space, Key.S, Key.W, Key.A, Key.D,
@@ -136,14 +135,6 @@ public class ArduinoController : MonoBehaviour
         int index = playerNo - 1;
         if (players[index] == null) {
             return 0;
-        }
-        if (isMenu)
-        {
-            if (players[index] == null)
-            {
-                return 0;
-            }
-            return 1; 
         }
         if (players[index].GetComponent<PlayerMovement>().ableToBoost())
         {

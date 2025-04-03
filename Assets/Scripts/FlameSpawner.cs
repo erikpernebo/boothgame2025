@@ -9,7 +9,7 @@ public class FlameSpawner : MonoBehaviour {
     public Transform[] spawnPoints;
     
     // How far upward the fire should rise.
-    public float riseDistance = 1.0f;
+    public float riseDistance = 2.0f;
     
     // Duration over which the fire rises.
     public float riseDuration = 1.0f;
