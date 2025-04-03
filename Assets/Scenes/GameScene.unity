@@ -7153,7 +7153,7 @@ MonoBehaviour:
   - {fileID: 43004823}
   - {fileID: 1789581741}
   riseDistance: 60
-  riseDuration: 0.01
+  riseDuration: 0.5
   flameLifetime: 2
 --- !u!114 &230789525
 MonoBehaviour:
@@ -12640,7 +12640,7 @@ MonoBehaviour:
   - {fileID: 826675155}
   - {fileID: 1125029074}
   riseDistance: 60
-  riseDuration: 0.01
+  riseDuration: 0.5
   flameLifetime: 2
 --- !u!1001 &442744137
 PrefabInstance:
