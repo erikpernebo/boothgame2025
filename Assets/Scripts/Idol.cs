@@ -12,7 +12,6 @@ public class Idol : MonoBehaviour
     public float throwForce = 15f;   // Force applied when dropping the idol
 
     public Transform idolHolder = null;  // The current player holding the idol
-    public GameObject myUIElement; // Assign this in the Inspector
 
     private int playersInContact = 0;
     private float contactTimer = 0f;  // Timer to track contact duration
@@ -27,12 +26,6 @@ public class Idol : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
         script = cam.GetComponent<CameraFollow>();
         rb = GetComponent<Rigidbody>();
 
@@ -97,7 +90,6 @@ public class Idol : MonoBehaviour
             // If the contact time exceeds the required time, start the game
             if (contactTimer >= contactTimeRequired)
             {
-                myUIElement.SetActive(false);
                 StartGame();
             }
         }
@@ -157,6 +149,7 @@ public class Idol : MonoBehaviour
             // Enable physics
             if (rb != null)
             {
+                Debug.Log("Rb found");
                 rb.isKinematic = false;
 
                 // Generate a random angle between -135 and 135 degrees (avoiding the 90 degrees behind)
