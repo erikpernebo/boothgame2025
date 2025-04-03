@@ -52,21 +52,25 @@ public class GameManager : MonoBehaviour
         // Player One: Space key.
         if (!player1.gameObject.activeSelf && keyboard.spaceKey.wasPressedThisFrame)
         {
+            player1.gameObject.transform.position = new Vector3(35.7999992f, 0.300000012f, -51.9000015f);
             player1.gameObject.SetActive(true);
         }
         // Player Two: Right Shift key.
         if (!player2.gameObject.activeSelf && keyboard.rightShiftKey.wasPressedThisFrame)
         {
+            player2.gameObject.transform.position = new Vector3(13.3f, 3.81469727e-06f, -51.7999992f);
             player2.gameObject.SetActive(true);
         }
         // Player Three: Z key.
         if (!player3.gameObject.activeSelf && keyboard.zKey.wasPressedThisFrame)
         {
+            player3.gameObject.transform.position = new Vector3(-13f, 0.300000012f, -51.7999992f);
             player3.gameObject.SetActive(true);
         }
         // Player Four: X key.
         if (!player4.gameObject.activeSelf && keyboard.xKey.wasPressedThisFrame)
         {
+            player4.gameObject.transform.position = new Vector3(-32.5f, 0.300000012f, -51.7999992f);
             player4.gameObject.SetActive(true);
         }
 
