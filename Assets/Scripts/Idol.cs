@@ -9,6 +9,7 @@ public class Idol : MonoBehaviour
     public Transform boulder;       // Reference to the boulder
     public float zRespawnOffset = 25f;  // Offset in front of boulder when respawning
     public float contactTimeRequired = 3f;  // Time required for consistent contact to start the game
+    public float throwForce = 15f;   // Force applied when dropping the idol
 
     public Transform idolHolder = null;  // The current player holding the idol
 
@@ -16,6 +17,7 @@ public class Idol : MonoBehaviour
     private float contactTimer = 0f;  // Timer to track contact duration
     public Transform cam;
     CameraFollow script;
+    private Rigidbody rb;
 
     private void Awake()
     {
@@ -26,6 +28,13 @@ public class Idol : MonoBehaviour
         }
         Instance = this;
         script = cam.GetComponent<CameraFollow>();
+        rb = GetComponent<Rigidbody>();
+
+        // If there's no Rigidbody, add one
+        if (rb == null)
+        {
+            rb = gameObject.AddComponent<Rigidbody>();
+        }
     }
 
     private void Update()
@@ -36,10 +45,17 @@ public class Idol : MonoBehaviour
             RespawnIdol();
         }
 
-        // If being held, update its position above the holder
+        // If being held, update its position above the holder and keep it upright
         if (idolHolder != null)
         {
             transform.position = idolHolder.position + Vector3.up * carryHeight;
+            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+
+            // Disable physics while being held
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+            }
         }
 
         // If player is in contact with the idol, increment the timer
@@ -100,18 +116,54 @@ public class Idol : MonoBehaviour
     {
         if (idolHolder != null)
         {
-            transform.parent = null; // Remove parent
+            // Get the player's forward direction
+            Vector3 playerForward = idolHolder.forward;
+
+            // Remove parent
+            transform.parent = null;
+
+            // Enable physics
+            if (rb != null)
+            {
+                rb.isKinematic = false;
+
+                // Generate a random angle between -135 and 135 degrees (avoiding the 90 degrees behind)
+                float randomAngle = Random.Range(-100f, 100f);
+
+                // Calculate the throw direction (rotating around the Y axis)
+                Vector3 throwDirection = Quaternion.Euler(0, randomAngle, 0) * playerForward;
+
+                // Add upward component for 45-degree angle
+                throwDirection = 2 * throwDirection + Vector3.up;
+                throwDirection.Normalize();
+
+                // Apply force in the calculated direction
+                rb.AddForce(throwDirection * throwForce, ForceMode.Impulse);
+            }
+
             idolHolder = null;
         }
     }
 
     private void RespawnIdol()
     {
-        DropIdol(); // If held, force-drop it
+        if (idolHolder != null)
+        {
+            transform.parent = null; // Remove parent
+            idolHolder = null;
+        }
 
         // Set new position slightly in front of the boulder
         transform.position = new Vector3(0, 2, boulder.position.z + zRespawnOffset);
         transform.parent = null;
+
+        // Reset physics
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = false;
+        }
     }
 
     private void StartGame()
