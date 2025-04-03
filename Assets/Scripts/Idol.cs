@@ -19,6 +19,11 @@ public class Idol : MonoBehaviour
     CameraFollow script;
     private Rigidbody rb;
 
+    private CameraShake cameraShake;
+    private bool isShaking = false;
+    public float shakeThreshold = 2.5f; // Start shaking when timer is below this value
+    public float maxShakeIntensity = 0.75f; // Maximum shake intensity when timer is near zero
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -34,6 +39,15 @@ public class Idol : MonoBehaviour
         if (rb == null)
         {
             rb = gameObject.AddComponent<Rigidbody>();
+        }
+    }
+
+    private void Start()
+    {
+        cameraShake = Camera.main.GetComponent<CameraShake>();
+        if (cameraShake == null)
+        {
+            cameraShake = Camera.main.gameObject.AddComponent<CameraShake>();
         }
     }
 
@@ -63,11 +77,33 @@ public class Idol : MonoBehaviour
         {
             contactTimer += Time.deltaTime;
 
+            // Start shaking when timer is close to completion
+            if (contactTimer >= (contactTimeRequired - shakeThreshold) && contactTimer < contactTimeRequired)
+            {
+                // Calculate intensity based on how close we are to completion
+                float progress = (contactTimer - (contactTimeRequired - shakeThreshold)) / shakeThreshold;
+                float intensity = progress * maxShakeIntensity;
+
+                // Apply camera shake with increasing intensity
+                if (cameraShake != null && !isShaking)
+                {
+                    cameraShake.ShakeCamera(intensity, 0.2f);
+                    isShaking = true;
+                    StartCoroutine(ResetShakeFlag(0.25f)); // Allow shake to happen again after a short delay
+                }
+            }
+
             // If the contact time exceeds the required time, start the game
             if (contactTimer >= contactTimeRequired)
             {
                 StartGame();
             }
+        }
+        else if (isShaking && cameraShake != null)
+        {
+            // Stop shaking if player breaks contact
+            cameraShake.StopShaking();
+            isShaking = false;
         }
     }
 
@@ -170,5 +206,11 @@ public class Idol : MonoBehaviour
     {
         RespawnIdol();
         script.startGame();
+    }
+
+    private IEnumerator ResetShakeFlag(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        isShaking = false;
     }
 }
