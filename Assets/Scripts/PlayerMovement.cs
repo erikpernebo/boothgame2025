@@ -5,7 +5,7 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     Animator animator;
-    [SerializeField] public float sideSpeed = 3f;
+    private float sideSpeed = 16f;
     [SerializeField] private float forwardAdd = 10f; // Extra speed when boosting
     [SerializeField] private float slowAdd = 15f;      // Speed reduction when slowing
     private float lobbySpeed = 15f;
@@ -421,6 +421,10 @@ public class PlayerMovement : MonoBehaviour
             animator.SetTrigger("Dying");
             trapHitTimer = 0;
             Idol.Instance.DropIdol();
+        }
+        else if (collision.gameObject.CompareTag("Door") && !camScript.gameState())
+        {
+            gameObject.SetActive(false);
         }
 
         if (collision.gameObject.CompareTag("Player") && timeSinceBoost < boostDuration)
