@@ -45,6 +45,10 @@ public class GameManager : MonoBehaviour
         player2.gameObject.SetActive(false);
         player3.gameObject.SetActive(false);
         player4.gameObject.SetActive(false);
+    }
+
+    void Update()
+    {
         // Player One: Space key.
         if (!player1.gameObject.activeSelf && keyboard.spaceKey.wasPressedThisFrame)
         {
@@ -65,10 +69,7 @@ public class GameManager : MonoBehaviour
         {
             player4.gameObject.SetActive(true);
         }
-    }
 
-    void Update()
-    {
         // Determine "dead" state for each player.
         // An inactive player is treated as dead.
         bool p1Dead = (player1 == null || !player1.gameObject.activeSelf || player1.IsDead());
