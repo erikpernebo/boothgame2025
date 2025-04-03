@@ -42017,8 +42017,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 49, y: 5}
+  m_AnchoredPosition: {x: 2, y: 0}
+  m_SizeDelta: {x: 55, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1448462183
 MonoBehaviour:
@@ -42040,7 +42040,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Take the idol if you dare
+  m_text: Take the Idol if you Dare
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2053bae2901dc4f758264f2538355a1f, type: 2}
   m_sharedMaterial: {fileID: 8854107929412015687, guid: 2053bae2901dc4f758264f2538355a1f, type: 2}

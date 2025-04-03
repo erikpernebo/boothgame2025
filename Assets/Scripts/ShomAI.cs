@@ -5,6 +5,8 @@ public class ShomAI : MonoBehaviour
 {
     int playersInContact = 0;
     public Material shomik;
+    public Material boulderMat;
+    public Material floorMat;
     public GameObject boulder;
     public GameObject floor;
     public GameObject tooltip;
@@ -37,7 +39,7 @@ public class ShomAI : MonoBehaviour
         }
     }
 
-    private void ActivateShomikMode()
+    public void ActivateShomikMode()
     {
         boulder.GetComponent<MeshRenderer>().material = shomik;
         floor.GetComponent<MeshRenderer>().material = shomik;
@@ -45,5 +47,14 @@ public class ShomAI : MonoBehaviour
         idol.SetActive(false);
         vape.SetActive(true);
         Debug.Log("Shomik");
+    }
+
+    public void DeactivateShomikMode()
+    {
+        boulder.GetComponent<MeshRenderer>().material = boulderMat;
+        floor.GetComponent<MeshRenderer>().material = floorMat;
+        tooltip.GetComponent<TextMeshProUGUI>().text = "Take the Idol if you Dare";
+        idol.SetActive(true);
+        vape.SetActive(false);
     }
 }
