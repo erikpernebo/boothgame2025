@@ -14,6 +14,7 @@ public class SphereRolling : MonoBehaviour
     private bool isTransitioning = false; // Flag to ensure the transition only happens once.
     CameraFollow script;
     private CameraShake cameraShake;
+    public GameObject shomAI;
 
     void Start()
     {
@@ -77,6 +78,8 @@ public class SphereRolling : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         StartCoroutine(FadeOutAndStop(audioSource, 0.5f));
+
+        shomAI.GetComponent<ShomAI>().DeactivateShomikMode();
 
         // Load the "Winner" scene after the transition
         LoadWinnerScene();

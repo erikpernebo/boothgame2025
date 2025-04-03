@@ -76,9 +76,12 @@ public class PlayerMovement : MonoBehaviour
     CameraFollow camScript;
     public GameObject vape;
     public GameObject idol;
+    private GameObject currIdol;
 
     void Start()
     {
+        currIdol = idol;
+
         // Allows boosting on start.
         timeSinceBoost = boostDuration + boostCooldown;
 
@@ -107,9 +110,20 @@ public class PlayerMovement : MonoBehaviour
     
     void Update()
     {
-        if (!idol.activeInHierarchy) {
-            Debug.Log("shomik alarm");
-            idol = vape;
+        if (!currIdol.activeInHierarchy) {
+            if (idol.activeInHierarchy)
+            {
+                currIdol = idol;
+            }
+            else if (vape.activeInHierarchy)
+            {
+                currIdol = vape;
+            }
+            else
+            {
+                idol.SetActive(true);
+                currIdol = idol;
+            }
         }
         // Once control is lost, force the character to sprint forward.
         if (transform.position.z >= 744f)
@@ -388,8 +402,8 @@ public class PlayerMovement : MonoBehaviour
             invincible = true;
             if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
-            if (idol.GetComponent<Idol>().idolHolder == transform) {
-                idol.GetComponent<Idol>().DropIdol();
+            if (currIdol.GetComponent<Idol>().idolHolder == transform) {
+                currIdol.GetComponent<Idol>().DropIdol();
             }
         }
         else if (collision.gameObject.CompareTag("Spike") && !invincible)
@@ -400,8 +414,8 @@ public class PlayerMovement : MonoBehaviour
             invincible = true;
             if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
-            if (idol.GetComponent<Idol>().idolHolder == transform) {
-                idol.GetComponent<Idol>().DropIdol();
+            if (currIdol.GetComponent<Idol>().idolHolder == transform) {
+                currIdol.GetComponent<Idol>().DropIdol();
             }
         }
         else if (collision.gameObject.CompareTag("Axe") && !invincible)
@@ -414,8 +428,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 StartCoroutine(FlashWhiteWhileStunned());
             }
-            if (idol.GetComponent<Idol>().idolHolder == transform) {
-                idol.GetComponent<Idol>().DropIdol();
+            if (currIdol.GetComponent<Idol>().idolHolder == transform) {
+                currIdol.GetComponent<Idol>().DropIdol();
             }
         }
         else if (collision.gameObject.CompareTag("FireTrap") && !invincible)
@@ -426,8 +440,8 @@ public class PlayerMovement : MonoBehaviour
             invincible = true;
             if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
-            if (idol.GetComponent<Idol>().idolHolder == transform) {
-                idol.GetComponent<Idol>().DropIdol();
+            if (currIdol.GetComponent<Idol>().idolHolder == transform) {
+                currIdol.GetComponent<Idol>().DropIdol();
             }
         }
         else if (collision.gameObject.CompareTag("Boulder") && camScript.gameState())
@@ -441,8 +455,8 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isStunnedHash, false); 
             animator.SetTrigger("Dying");
             trapHitTimer = 0;
-            if (idol.GetComponent<Idol>().idolHolder == transform) {
-                idol.GetComponent<Idol>().DropIdol();
+            if (currIdol.GetComponent<Idol>().idolHolder == transform) {
+                currIdol.GetComponent<Idol>().DropIdol();
             }
         }
         else if (collision.gameObject.CompareTag("Door") && !camScript.gameState())
@@ -455,7 +469,7 @@ public class PlayerMovement : MonoBehaviour
             if (idol.GetComponent<Idol>().idolHolder == collision.transform)
             {
                 // Transfer the idol.
-                idol.GetComponent<Idol>().PickUpIdol(transform);
+                currIdol.GetComponent<Idol>().PickUpIdol(transform);
             }
         }
     }
