@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Idol : MonoBehaviour
 {
-
+    public AudioSource loopAudioSource;
+    public AudioClip loopAudioClip;
     public AudioSource audioSource;  // Assign an AudioSource component (can be on the same GameObject)
     public AudioClip shakeAudio;
     public static Idol Instance { get; private set; }
@@ -218,9 +219,15 @@ public class Idol : MonoBehaviour
     }
 
     private void StartGame()
-    {
+    {   
         RespawnIdol();
         script.startGame();
+        if (loopAudioSource != null && loopAudioClip != null)
+        {
+            loopAudioSource.clip = loopAudioClip;
+            loopAudioSource.loop = true;
+            loopAudioSource.Play();
+        }
     }
 
     private IEnumerator ResetShakeFlag(float delay)
