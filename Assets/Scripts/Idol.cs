@@ -12,6 +12,7 @@ public class Idol : MonoBehaviour
     public float throwForce = 15f;   // Force applied when dropping the idol
 
     public Transform idolHolder = null;  // The current player holding the idol
+    public GameObject myUIElement; // Assign this in the Inspector
 
     private Transform playerInContact = null;  // Reference to player currently in contact
     private float contactTimer = 0f;  // Timer to track contact duration
@@ -66,6 +67,7 @@ public class Idol : MonoBehaviour
             // If the contact time exceeds the required time, start the game
             if (contactTimer >= contactTimeRequired)
             {
+                myUIElement.SetActive(false);
                 StartGame();
             }
         }
