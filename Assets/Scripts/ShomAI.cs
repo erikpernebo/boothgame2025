@@ -22,7 +22,7 @@ public class ShomAI : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playersInContact += 1;
-            if (playersInContact >= 1) {
+            if (playersInContact >= 4) {
                 ActivateShomikMode();
             }
         }
