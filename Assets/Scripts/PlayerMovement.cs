@@ -28,6 +28,10 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private RuntimeAnimatorController alternateAnimatorController;
 
+    public AudioSource audioSource;  // Assign an AudioSource component (can be on the same GameObject)
+    public AudioClip deathAudioClip; // Assign the death sound clip
+
+
 
     // New field for the forced sprint speed when control is lost.
     [SerializeField] private float forcedSprintSpeed = 15f;
@@ -173,7 +177,7 @@ public class PlayerMovement : MonoBehaviour
                     transform.Translate(move);
                 }
                 if (trapHitTimer >= 3f)
-                {
+                {   
                     gameObject.SetActive(false);
                 } 
             }
@@ -423,6 +427,10 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Boulder") && camScript.gameState())
         {
+            if (audioSource != null && deathAudioClip != null)
+            {
+                audioSource.PlayOneShot(deathAudioClip);
+            }
             Debug.Log("Crushed By Boulder");
             dying = true;
             animator.SetBool(isStunnedHash, false); 

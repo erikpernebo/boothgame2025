@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Idol : MonoBehaviour
 {
+
+    public AudioSource audioSource;  // Assign an AudioSource component (can be on the same GameObject)
+    public AudioClip shakeAudio;
     public static Idol Instance { get; private set; }
 
     public float carryHeight = 2f;  // How high the idol floats above the player
@@ -52,6 +55,7 @@ public class Idol : MonoBehaviour
         }
     }
 
+    private bool hasPlayedShakeAudio = false;
     private void Update()
     {
         // Check if the boulder has passed the idol's Z position
@@ -81,6 +85,12 @@ public class Idol : MonoBehaviour
             // Start shaking when timer is close to completion
             if (contactTimer >= (contactTimeRequired - shakeThreshold) && contactTimer < contactTimeRequired)
             {
+                if (audioSource != null && shakeAudio != null && !hasPlayedShakeAudio)
+                {
+                    audioSource.clip = shakeAudio;
+                    audioSource.Play();  // Adjust volume as needed
+                    hasPlayedShakeAudio = true;
+                }
                 // Calculate intensity based on how close we are to completion
                 float progress = (contactTimer - (contactTimeRequired - shakeThreshold)) / shakeThreshold;
                 float intensity = progress * maxShakeIntensity;
@@ -103,12 +113,28 @@ public class Idol : MonoBehaviour
         }
         else if (isShaking && cameraShake != null)
         {
+            StartCoroutine(FadeOutAndStop(audioSource, 0.5f));
+            hasPlayedShakeAudio = false;
             // Stop shaking if player breaks contact
             cameraShake.StopShaking();
             isShaking = false;
         }
     }
-
+    private IEnumerator FadeOutAndStop(AudioSource source, float fadeDuration)
+    {
+        float startVolume = source.volume;
+        float time = 0f;
+        
+        while (time < fadeDuration)
+        {
+            source.volume = Mathf.Lerp(startVolume, 0, time / fadeDuration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        
+        source.Stop();
+        source.volume = startVolume; // Optionally reset the volume
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (script.gameState() && idolHolder == null && other.CompareTag("Player"))
