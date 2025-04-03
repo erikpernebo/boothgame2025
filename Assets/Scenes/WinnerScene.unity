@@ -520,7 +520,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2658257814712226487, guid: 14413797176624562adcef9e8f971b2d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 60.4
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 2658257814712226487, guid: 14413797176624562adcef9e8f971b2d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -780,7 +780,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 84813db9067714c4e8e526e5025957ce, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 742f961fce63f43f9a8e782992cbabaf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1149,7 +1149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9a2580ba98c3f640831fb98f3d8a400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portName: COM3
   baudRate: 115200
   player1: {fileID: 0}
   player2: {fileID: 0}
