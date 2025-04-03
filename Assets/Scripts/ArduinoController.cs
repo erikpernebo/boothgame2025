@@ -9,7 +9,8 @@ using System.Threading;
 public class ArduinoController : MonoBehaviour
 {
     //private string portName = "COM3";
-    private string portName = "/dev/tty.usbmodem11401";
+   // private string portName = "/dev/tty.usbmodem11401";
+    private string portName = "/dev/tty.usbmodem1401";
     public int baudRate = 115200;
 
     private SerialPort serialPort;
