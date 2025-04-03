@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Idol : MonoBehaviour
 {
@@ -6,9 +7,15 @@ public class Idol : MonoBehaviour
 
     public float carryHeight = 2f;  // How high the idol floats above the player
     public Transform boulder;       // Reference to the boulder
-    public float zRespawnOffset = 20f;  // Offset in front of boulder when respawning
+    public float zRespawnOffset = 25f;  // Offset in front of boulder when respawning
+    public float contactTimeRequired = 3f;  // Time required for consistent contact to start the game
 
     public Transform idolHolder = null;  // The current player holding the idol
+
+    private Transform playerInContact = null;  // Reference to player currently in contact
+    private float contactTimer = 0f;  // Timer to track contact duration
+    public Transform cam;
+    CameraFollow script;
 
     private void Awake()
     {
@@ -18,11 +25,7 @@ public class Idol : MonoBehaviour
             return;
         }
         Instance = this;
-    }
-
-    private void Start()
-    {
-        RespawnIdol();  // Ensure the idol starts in the correct position
+        script = cam.GetComponent<CameraFollow>();
     }
 
     private void Update()
@@ -38,13 +41,51 @@ public class Idol : MonoBehaviour
         {
             transform.position = idolHolder.position + Vector3.up * carryHeight;
         }
+
+        // If player is in contact with the idol, increment the timer
+        if (!script.gameState() && playerInContact != null)
+        {
+            contactTimer += Time.deltaTime;
+
+            // If the contact time exceeds the required time, start the game
+            if (contactTimer >= contactTimeRequired)
+            {
+                StartGame();
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (idolHolder == null && other.CompareTag("Player"))
+        if (script.gameState() && idolHolder == null && other.CompareTag("Player"))
         {
             PickUpIdol(other.transform);
+        }
+
+        // Track when player enters trigger
+        if (other.CompareTag("Player"))
+        {
+            playerInContact = other.transform;
+            contactTimer = 0f;  // Reset timer when contact begins
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        // Ensure we're tracking the correct player if multiple players exist
+        if (other.CompareTag("Player") && playerInContact == null)
+        {
+            playerInContact = other.transform;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // Reset contact tracking when player exits trigger
+        if (other.CompareTag("Player") && other.transform == playerInContact)
+        {
+            playerInContact = null;
+            contactTimer = 0f;  // Reset timer when contact is broken
         }
     }
 
@@ -71,5 +112,11 @@ public class Idol : MonoBehaviour
         // Set new position slightly in front of the boulder
         transform.position = new Vector3(0, 2, boulder.position.z + zRespawnOffset);
         transform.parent = null;
+    }
+
+    private void StartGame()
+    {
+        RespawnIdol();
+        script.startGame();
     }
 }
