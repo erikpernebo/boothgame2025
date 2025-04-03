@@ -10,6 +10,7 @@ TagManager:
   - Boulder
   - FireTrap
   - Wall
+  - Door
   layers:
   - Default
   - TransparentFX
