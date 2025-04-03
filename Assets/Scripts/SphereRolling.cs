@@ -11,10 +11,16 @@ public class SphereRolling : MonoBehaviour
     [SerializeField] private Transform cam;
     private bool isTransitioning = false; // Flag to ensure the transition only happens once.
     CameraFollow script;
-    
+    private CameraShake cameraShake;
+
     void Start()
     {
         script = cam.GetComponent<CameraFollow>();
+        cameraShake = Camera.main.GetComponent<CameraShake>();
+        if (cameraShake == null)
+        {
+            cameraShake = Camera.main.gameObject.AddComponent<CameraShake>();
+        }
     }
 
     void Update()
@@ -48,7 +54,8 @@ public class SphereRolling : MonoBehaviour
         Quaternion startRotation = transform.rotation;
         Quaternion targetRotation = Quaternion.Euler(targetRotationEuler);
         float elapsedTime = 0f;
-        
+
+        cameraShake.ShakeCamera(0.75f, 0.4f);
         while (elapsedTime < transitionDuration)
         {
             float t = elapsedTime / transitionDuration;
@@ -60,6 +67,8 @@ public class SphereRolling : MonoBehaviour
         
         transform.position = targetPosition;
         transform.rotation = targetRotation;
+
+        yield return new WaitForSeconds(1f);
 
         // Load the "Winner" scene after the transition
         LoadWinnerScene();
