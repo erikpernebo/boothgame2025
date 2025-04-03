@@ -74,6 +74,8 @@ public class PlayerMovement : MonoBehaviour
     private float cameraOffsetMin = -70f;
     [SerializeField] private Transform cam;
     CameraFollow camScript;
+    public GameObject vape;
+    public GameObject idol;
 
     void Start()
     {
@@ -101,11 +103,14 @@ public class PlayerMovement : MonoBehaviour
         isLeftBackHash = Animator.StringToHash("isLeftBack");
         isRightWalkingHash = Animator.StringToHash("isRightWalking");
         isRightBackHash = Animator.StringToHash("isRightBack");
-
     }
     
     void Update()
     {
+        if (!idol.activeInHierarchy) {
+            Debug.Log("shomik alarm");
+            idol = vape;
+        }
         // Once control is lost, force the character to sprint forward.
         if (transform.position.z >= 744f)
         {
@@ -383,8 +388,8 @@ public class PlayerMovement : MonoBehaviour
             invincible = true;
             if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
-            if (Idol.Instance.idolHolder == transform) {
-                Idol.Instance.DropIdol();
+            if (idol.GetComponent<Idol>().idolHolder == transform) {
+                idol.GetComponent<Idol>().DropIdol();
             }
         }
         else if (collision.gameObject.CompareTag("Spike") && !invincible)
@@ -395,8 +400,8 @@ public class PlayerMovement : MonoBehaviour
             invincible = true;
             if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
-            if (Idol.Instance.idolHolder == transform) {
-                Idol.Instance.DropIdol();
+            if (idol.GetComponent<Idol>().idolHolder == transform) {
+                idol.GetComponent<Idol>().DropIdol();
             }
         }
         else if (collision.gameObject.CompareTag("Axe") && !invincible)
@@ -409,8 +414,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 StartCoroutine(FlashWhiteWhileStunned());
             }
-            if (Idol.Instance.idolHolder == transform) {
-                Idol.Instance.DropIdol();
+            if (idol.GetComponent<Idol>().idolHolder == transform) {
+                idol.GetComponent<Idol>().DropIdol();
             }
         }
         else if (collision.gameObject.CompareTag("FireTrap") && !invincible)
@@ -421,8 +426,8 @@ public class PlayerMovement : MonoBehaviour
             invincible = true;
             if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
-            if (Idol.Instance.idolHolder == transform) {
-                Idol.Instance.DropIdol();
+            if (idol.GetComponent<Idol>().idolHolder == transform) {
+                idol.GetComponent<Idol>().DropIdol();
             }
         }
         else if (collision.gameObject.CompareTag("Boulder") && camScript.gameState())
@@ -436,8 +441,8 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isStunnedHash, false); 
             animator.SetTrigger("Dying");
             trapHitTimer = 0;
-            if (Idol.Instance.idolHolder == transform) {
-                Idol.Instance.DropIdol();
+            if (idol.GetComponent<Idol>().idolHolder == transform) {
+                idol.GetComponent<Idol>().DropIdol();
             }
         }
         else if (collision.gameObject.CompareTag("Door") && !camScript.gameState())
@@ -447,10 +452,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Player") && timeSinceBoost < boostDuration)
         {
-            if (Idol.Instance.idolHolder == collision.transform)
+            if (idol.GetComponent<Idol>().idolHolder == collision.transform)
             {
                 // Transfer the idol.
-                Idol.Instance.PickUpIdol(transform);
+                idol.GetComponent<Idol>().PickUpIdol(transform);
             }
         }
     }
