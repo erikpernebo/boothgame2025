@@ -379,6 +379,7 @@ public class PlayerMovement : MonoBehaviour
             invincible = true;
             if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
+            Idol.Instance.DropIdol();
         }
         else if (collision.gameObject.CompareTag("Spike") && !invincible)
         {
@@ -388,6 +389,7 @@ public class PlayerMovement : MonoBehaviour
             invincible = true;
             if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
+            Idol.Instance.DropIdol();
         }
         else if (collision.gameObject.CompareTag("Axe") && !invincible)
         {
@@ -399,6 +401,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 StartCoroutine(FlashWhiteWhileStunned());
             }
+            Idol.Instance.DropIdol();
         }
         else if (collision.gameObject.CompareTag("FireTrap") && !invincible)
         {
@@ -408,6 +411,7 @@ public class PlayerMovement : MonoBehaviour
             invincible = true;
             if (flashMaterial != null)
                 StartCoroutine(FlashWhiteWhileStunned());
+            Idol.Instance.DropIdol();
         }
         else if (collision.gameObject.CompareTag("Boulder") && camScript.gameState())
         {
@@ -416,6 +420,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(isStunnedHash, false); 
             animator.SetTrigger("Dying");
             trapHitTimer = 0;
+            Idol.Instance.DropIdol();
         }
 
         if (collision.gameObject.CompareTag("Player") && timeSinceBoost < boostDuration)
