@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.LowLevel;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +15,9 @@ public class GameManager : MonoBehaviour
     public PlayerMovement player2;
     public PlayerMovement player3;
     public PlayerMovement player4;
+    [SerializeField] private Transform cam;
+    private Keyboard keyboard;
+    CameraFollow script;
 
     // Flag to prevent multiple triggers.
     private bool endTriggered = false;
@@ -29,36 +35,35 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        keyboard = InputSystem.GetDevice<Keyboard>();
+        script = cam.GetComponent<CameraFollow>();
     }
 
     void Start()
     {
-        // Read join info from PlayerPrefs.
-        int playerOneJoined = PlayerPrefs.GetInt("PlayerOneJoined", 0);
-        int playerTwoJoined = PlayerPrefs.GetInt("PlayerTwoJoined", 0);
-        int playerThreeJoined = PlayerPrefs.GetInt("PlayerThreeJoined", 0);
-        int playerFourJoined = PlayerPrefs.GetInt("PlayerFourJoined", 0);
-
-        // Activate the players if they joined.
-        if (player1 != null)
+        player1.gameObject.SetActive(false);
+        player2.gameObject.SetActive(false);
+        player3.gameObject.SetActive(false);
+        player4.gameObject.SetActive(false);
+        // Player One: Space key.
+        if (!player1.gameObject.activeSelf && keyboard.spaceKey.wasPressedThisFrame)
         {
-            player1.gameObject.SetActive(playerOneJoined == 1);
-            Debug.Log("Player 1 active: " + (playerOneJoined == 1));
+            player1.gameObject.SetActive(true);
         }
-        if (player2 != null)
+        // Player Two: Right Shift key.
+        if (!player2.gameObject.activeSelf && keyboard.rightShiftKey.wasPressedThisFrame)
         {
-            player2.gameObject.SetActive(playerTwoJoined == 1);
-            Debug.Log("Player 2 active: " + (playerTwoJoined == 1));
+            player2.gameObject.SetActive(true);
         }
-        if (player3 != null)
+        // Player Three: Z key.
+        if (!player3.gameObject.activeSelf && keyboard.zKey.wasPressedThisFrame)
         {
-            player3.gameObject.SetActive(playerThreeJoined == 1);
-            Debug.Log("Player 3 active: " + (playerThreeJoined == 1));
+            player3.gameObject.SetActive(true);
         }
-        if (player4 != null)
+        // Player Four: X key.
+        if (!player4.gameObject.activeSelf && keyboard.xKey.wasPressedThisFrame)
         {
-            player4.gameObject.SetActive(playerFourJoined == 1);
-            Debug.Log("Player 4 active: " + (playerFourJoined == 1));
+            player4.gameObject.SetActive(true);
         }
     }
 
@@ -72,7 +77,7 @@ public class GameManager : MonoBehaviour
         bool p4Dead = (player4 == null || !player4.gameObject.activeSelf || player4.IsDead());
 
         // If all players (or all active players) are dead, trigger the end.
-        if (!endTriggered && p1Dead && p2Dead && p3Dead && p4Dead)
+        if (script.gameState() && !endTriggered && p1Dead && p2Dead && p3Dead && p4Dead)
         {
             endTriggered = true;
             StartCoroutine(LoadEndAfterDelay(1f));

@@ -8,13 +8,24 @@ public class SphereRolling : MonoBehaviour
     public Vector3 targetPosition = new Vector3(0f, 34.2f, 715f);  // Final target position.
     public Vector3 targetRotationEuler = new Vector3(-164.986f, 0f, 0f); // Final target rotation in Euler angles.
     public float transitionDuration = 1f;                 // Duration of the transition.
-
+    [SerializeField] private Transform cam;
     private bool isTransitioning = false; // Flag to ensure the transition only happens once.
+    CameraFollow script;
     
+    void Start()
+    {
+        script = cam.GetComponent<CameraFollow>();
+    }
+
     void Update()
     {
+        if (!script.gameState())
+        {
+            return;
+        }
         if (!isTransitioning)
         {
+            
             float movement = CameraFollow.cameraSpeed * Time.deltaTime;
 
             if (transform.position.z + movement >= maxZPosition)
@@ -55,26 +66,26 @@ public class SphereRolling : MonoBehaviour
     }
 
     private void LoadWinnerScene()
-{
-    string winnerMessage;
-
-    if (Idol.Instance != null && Idol.Instance.idolHolder != null)
     {
-        // Get the name of the idol holder
-        string winnerName = Idol.Instance.idolHolder.name;
-        winnerMessage = $"Player {winnerName} Wins!";
-    }
-    else
-    {
-        // Temple of Doom-inspired fallback message
-        winnerMessage = "No winner! The temple claims its prize!";
-    }
+        string winnerMessage;
 
-    // Store the message in PlayerPrefs for the WinnerScene to display
-    PlayerPrefs.SetString("WinnerMessage", winnerMessage);
+        if (Idol.Instance != null && Idol.Instance.idolHolder != null)
+        {
+            // Get the name of the idol holder
+            string winnerName = Idol.Instance.idolHolder.name;
+            winnerMessage = $"Player {winnerName} Wins!";
+        }
+        else
+        {
+            // Temple of Doom-inspired fallback message
+            winnerMessage = "No winner! The temple claims its prize!";
+        }
 
-    // Load the WinnerScene
-    SceneManager.LoadScene("WinnerScene");
-}
+        // Store the message in PlayerPrefs for the WinnerScene to display
+        PlayerPrefs.SetString("WinnerMessage", winnerMessage);
+
+        // Load the WinnerScene
+        SceneManager.LoadScene("WinnerScene");
+    }
 
 }

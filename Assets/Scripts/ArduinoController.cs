@@ -139,7 +139,11 @@ public class ArduinoController : MonoBehaviour
         }
         if (isMenu)
         {
-            return 1;
+            if (players[index] == null)
+            {
+                return 0;
+            }
+            return 1; 
         }
         if (players[index].GetComponent<PlayerMovement>().ableToBoost())
         {
