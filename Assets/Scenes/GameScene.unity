@@ -13174,7 +13174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 312027462227979669, guid: f5f6a6a31d80ca94d9a391ac865021bd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -94.1221
+      value: -97.7
       objectReference: {fileID: 0}
     - target: {fileID: 312027462227979669, guid: f5f6a6a31d80ca94d9a391ac865021bd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -17230,7 +17230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7193240502142752586, guid: b965f52aa2103f24fadfd7c9ec23fb09, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -147.4398
+      value: -132.3
       objectReference: {fileID: 0}
     - target: {fileID: 7193240502142752586, guid: b965f52aa2103f24fadfd7c9ec23fb09, type: 3}
       propertyPath: m_LocalPosition.y
@@ -17238,7 +17238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7193240502142752586, guid: b965f52aa2103f24fadfd7c9ec23fb09, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -248.19594
+      value: -251
       objectReference: {fileID: 0}
     - target: {fileID: 7193240502142752586, guid: b965f52aa2103f24fadfd7c9ec23fb09, type: 3}
       propertyPath: m_LocalRotation.w
@@ -24642,7 +24642,7 @@ MonoBehaviour:
   player2: {fileID: 849785443}
   player3: {fileID: 1807879104}
   player4: {fileID: 2046890319}
-  cam: {fileID: 0}
+  cam: {fileID: 330585546}
 --- !u!4 &860539105
 Transform:
   m_ObjectHideFlags: 0
@@ -30151,7 +30151,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7768716990541391073, guid: 7320cf8867d304e41be91c2ed71cc4ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -137.63982
+      value: -146.9
       objectReference: {fileID: 0}
     - target: {fileID: 7768716990541391073, guid: 7320cf8867d304e41be91c2ed71cc4ad, type: 3}
       propertyPath: m_LocalPosition.y
@@ -41529,7 +41529,9 @@ MonoBehaviour:
   carryHeight: 12
   boulder: {fileID: 1640928849}
   zRespawnOffset: 75
+  contactTimeRequired: 3
   idolHolder: {fileID: 0}
+  cam: {fileID: 330585546}
 --- !u!136 &1473174231
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -44412,10 +44414,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portName: COM3
   baudRate: 115200
-  player1: {fileID: 0}
+  player1: {fileID: 1546225776799076}
   player2: {fileID: 849785445}
-  player3: {fileID: 0}
-  player4: {fileID: 0}
+  player3: {fileID: 1807879106}
+  player4: {fileID: 2046890321}
   isMenu: 0
 --- !u!1001 &1604770735
 PrefabInstance:
@@ -44928,7 +44930,7 @@ MonoBehaviour:
   targetPosition: {x: 0, y: 15, z: 712}
   targetRotationEuler: {x: -164.986, y: 0, z: 0}
   transitionDuration: 1
-  cam: {fileID: 0}
+  cam: {fileID: 330585546}
 --- !u!65 &1640928846
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -49590,6 +49592,11 @@ MonoBehaviour:
   flashMaterial: {fileID: 2100000, guid: a284ff5ad66a74162b207eb3d153e811, type: 2}
   flashInterval: 0.1
   cam: {fileID: 330585546}
+--- !u!4 &1807879106 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4992728149789526, guid: 4e4ca048bf6184a4896cec8256faa038, type: 3}
+  m_PrefabInstance: {fileID: 1807879098}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1810400969
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49689,7 +49696,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2658257814712226487, guid: 14413797176624562adcef9e8f971b2d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -28.720001
+      value: -21.04
       objectReference: {fileID: 0}
     - target: {fileID: 2658257814712226487, guid: 14413797176624562adcef9e8f971b2d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -55649,6 +55656,11 @@ MonoBehaviour:
   flashMaterial: {fileID: 2100000, guid: a284ff5ad66a74162b207eb3d153e811, type: 2}
   flashInterval: 0.1
   cam: {fileID: 330585546}
+--- !u!4 &2046890321 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4659995309720128, guid: 003da1c948a32d44887358162dfec7d1, type: 3}
+  m_PrefabInstance: {fileID: 2046890313}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2047780679 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 621923570699444347, guid: 0e66b11de781e4348af3a94a1945c400, type: 3}
@@ -58221,6 +58233,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266fa710517c14f4ab00ed2d2c006b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1546225776799076 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6988298653779450027, guid: f2f1582ee952441c4a1efa18097b3c2c, type: 3}
+  m_PrefabInstance: {fileID: 2461544767335349337}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2461544767335349337
 PrefabInstance:
   m_ObjectHideFlags: 0
