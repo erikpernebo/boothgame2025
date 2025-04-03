@@ -15,6 +15,8 @@ public class SphereRolling : MonoBehaviour
     CameraFollow script;
     private CameraShake cameraShake;
     public GameObject shomAI;
+    public GameObject idol;
+    public GameObject vape;
 
     void Start()
     {
@@ -52,7 +54,8 @@ public class SphereRolling : MonoBehaviour
     }
     
     private IEnumerator MoveToTarget()
-    {   
+    {
+        Debug.Log("m2");
         if (audioSource != null && shakeAudio != null)
         {
             audioSource.clip = shakeAudio;
@@ -76,10 +79,7 @@ public class SphereRolling : MonoBehaviour
         transform.position = targetPosition;
         transform.rotation = targetRotation;
 
-        yield return new WaitForSeconds(1f);
         StartCoroutine(FadeOutAndStop(audioSource, 0.5f));
-
-        shomAI.GetComponent<ShomAI>().DeactivateShomikMode();
 
         // Load the "Winner" scene after the transition
         LoadWinnerScene();
@@ -104,11 +104,18 @@ public class SphereRolling : MonoBehaviour
     {
         string winnerMessage;
 
-        if (Idol.Instance != null && Idol.Instance.idolHolder != null)
+        if (idol.activeInHierarchy && idol.GetComponent<Idol>().idolHolder != null)
         {
             // Get the name of the idol holder
-            string winnerName = Idol.Instance.idolHolder.name;
+            string winnerName = idol.GetComponent<Idol>().idolHolder.name;
             winnerMessage = $"Player {winnerName} Wins!";
+        }
+        else if (vape.activeInHierarchy && vape.GetComponent<Idol>().idolHolder != null)
+        {
+            // Get the name of the idol holder
+            shomAI.GetComponent<ShomAI>().DeactivateShomikMode();
+            string winnerName = vape.GetComponent<Idol>().idolHolder.name;
+            winnerMessage = $"Player {winnerName} is the Ginder King!";
         }
         else
         {
